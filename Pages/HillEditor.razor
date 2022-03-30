@@ -1,34 +1,41 @@
 ﻿@page "/Hilleditor"
 
 @using PracaInżynierskaTomaszBaczek.Models
+@using Microsoft.Extensions.Logging
+@inject ILogger<HillEditor> Logger
 
 <h3>HillEditor</h3>
 
-<div>
-    <form>
-        <label for="hsize">Hill size:</label>
-        <input type="number" id="hsize" name="hsize" @bind="@inputHillSize" @oninput="OnInputEvent"><br><br>
+<div id="editorform">
+    @*<EditForm Model="@inputmodel">
+        <label for="HillSize">Hill size:</label>
+        <input type="number" id="HillSize" name="HillSize" @bind="@inputHillSize" @oninput="OnInputEvent"><br><br>
         <label for="hname">Hill name:</label>
         <input type="text" id="hname" name="hname"@bind="@inputmodel.HillName" @oninput="@((e) => { inputmodel.HillName = (string)e.Value; })"><br><br>
         <label for="lname">Country code:</label>
         <input type="text" id="lname" name="lname"><br><br>
         <input type="submit" value="Submit">
-    </form>
+    </EditForm>*@
+    <EditForm Model="@inputmodel">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label for="hillSize">Hill size:</label>
+        <InputNumber id="hillsize" @bind-Value="inputmodel.HillSize" align="right"/><br />
+        <label for="hillname">Hill name:</label>
+        <InputText id="hillname" @bind-Value="inputmodel.HillName" align="right"/><br />
+        <label for="countrycode">Country code:</label>
+        <InputText id="countrycode" @bind-Value="inputmodel.CountryCode" align="right"/><br />
+        <button type="submit">Generate hill</button>
+
+    </EditForm>
 </div>
 
 @code {
-    private UserInputModel inputmodel = new UserInputModel();
-    private UserInputModel savedmodel = new UserInputModel();
-    private int inputHillSize = 140;
+    private UserInputModel inputmodel = new();
 
-    private void OnInputEvent(ChangeEventArgs changeEvent)
+    private void HandleValidSubmit()
     {
-        inputHillSize = (int)changeEvent.Value;
-
-        //savedmodel.HillSize = inputmodel.HillSize;
-        //savedmodel.HillName = inputmodel.HillName;
-        //savedmodel.CountryCode = inputmodel.CountryCode;
-
+        Logger.LogInformation("HandleValidSubmit called");
     }
 
 }

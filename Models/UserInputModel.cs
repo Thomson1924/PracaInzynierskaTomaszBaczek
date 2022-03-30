@@ -8,8 +8,8 @@ namespace PracaInżynierskaTomaszBaczek.Models
     public class UserInputModel
     {
         public string HillName { get; set; }
-        public string CountryCode { get; set; }
-        public int HillSize { get; set; }
+        public string CountryCode { get; set; } 
+        public int HillSize { get; set; } = 140;
 
-    }
+        }
 }
