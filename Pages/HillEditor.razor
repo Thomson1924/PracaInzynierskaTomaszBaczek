@@ -1,41 +1,49 @@
 ﻿@page "/Hilleditor"
-@using BlazorColorPicker
 @inherits TexturesAndMaterials
 @using PracaInżynierskaTomaszBaczek.Models
+@using PracaInżynierskaTomaszBaczek.Services
+@using PracaInżynierskaTomaszBaczek.Interfaces
 @using Microsoft.Extensions.Logging
 @inject ILogger<HillEditor> Logger
+@inject IHillService hillService
 
-<h3>HillEditor</h3>
+<h1 align="center">HillEditor</h1>
+<p align="center"> Please provide your hill parameters to create your own Deluxe Ski Jump 4 hill!</p>
 
-<div id="editorform">
-    @*<EditForm Model="@inputmodel">
-            <label for="HillSize">Hill size:</label>
-            <input type="number" id="HillSize" name="HillSize" @bind="@inputHillSize" @oninput="OnInputEvent"><br><br>
-            <label for="hname">Hill name:</label>
-            <input type="text" id="hname" name="hname"@bind="@inputmodel.HillName" @oninput="@((e) => { inputmodel.HillName = (string)e.Value; })"><br><br>
-            <label for="lname">Country code:</label>
-            <input type="text" id="lname" name="lname"><br><br>
-            <input type="submit" value="Submit">
-        </EditForm>*@
-    <EditForm Model="@inputmodel">
+<div id="editorform" class="col-10">
+    <EditForm Model="@inputmodel" OnValidSubmit="@CreateHill">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <label for="hillSize">Hill size:</label>
-        <InputNumber id="hillsize" @bind-Value="inputmodel.HillSize" align="right" /><br />
-        <label for="Texture">Texture:</label>
-        <InputSelect id="Textures" class="form-group" @bind-Value="@Textures">
-            @foreach (var item in Textures)
-            {
-                <option value="@item.Name">@item.Displayname</option>
-            }
-        </InputSelect>
-        <input type="color" id="head" name="head" value="@InColor" @onchange="@UpdateIt">
-        <label for="head">@InColor</label>
-        <label for="hillname">Hill name:</label>
-        <InputText id="hillname" @bind-Value="inputmodel.HillName" align="right" /><br />
-        <label for="countrycode">Country code:</label>
-        <InputText id="countrycode" @bind-Value="inputmodel.CountryCode" align="right" /><br />
-        <button type="submit">Generate hill</button>
+        @*HillSize*@
+        <div class="col-12 row">
+            <label for="hillsize" class="col-4 font-weight-bold" align="right">Hill size:</label>
+            <InputNumber id="hillsize" @bind-Value="@inputmodel.HillSize" class="form-control col-2"/><br />
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="Texture" class="col-4 font-weight-bold" align="right">Judgetower outside texture:</label>
+            <InputSelect id="JudgetowerTextureOut" class="form-control col-2" @bind-Value="@inputmodel.JudgetowerTextureOut">
+                @foreach (var item in Textures)
+                {
+                    <option value="@item.Name.ToString()">@item.Displayname.ToString()</option>
+                }
+            </InputSelect>
+            <input type="color" id="head" name="head" value="@inputmodel.JudgetowerColorOut" class="form-control col-2">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="hillname" class="col-4 font-weight-bold" align="right">Hill name:</label>
+            <InputText id="hillname" @bind-Value="@inputmodel.HillName" class="form-control col-2" />
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="countrycode" class="col-4 font-weight-bold" align="right">Country code:</label>
+            <InputText id="countrycode" @bind-Value="inputmodel.CountryCode" class="form-control col-2" />
+        </div>
+            
+
+            <br />
+            <button type="submit" class="col-lg-2">Generate hill</button>
 
     </EditForm>
 </div>
@@ -47,16 +55,15 @@
     [Parameter]
     public EventCallback<string> ReturnedColor { get; set; }
 
-    private void UpdateIt(ChangeEventArgs e)
-    {
-        InColor = e.Value.ToString();
-        ReturnedColor.InvokeAsync(InColor);
-    }
+
     private void HandleValidSubmit()
     {
         Logger.LogInformation("HandleValidSubmit called");
     }
+    private void CreateHill()
+    {
 
+    }
 
 
 
