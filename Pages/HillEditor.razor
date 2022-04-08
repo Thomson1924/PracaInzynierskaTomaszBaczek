@@ -1,0 +1,134 @@
+﻿@page "/Hilleditor"
+@inherits TexturesAndMaterials
+@using PracaInżynierskaTomaszBaczek.Models
+@using PracaInżynierskaTomaszBaczek.Services
+@using PracaInżynierskaTomaszBaczek.Interfaces
+@using Microsoft.Extensions.Logging
+@inject ILogger<HillEditor> Logger
+@inject IHillService hillService
+
+<h1 align="center">HillEditor</h1>
+<p align="center"> Please provide your hill parameters to create your own Deluxe Ski Jump 4 hill!</p>
+
+<div id="editorform" class="col-10">
+    <EditForm Model="@inputmodel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        @*HillSize*@
+        <div class="col-12 row">
+            <label for="hillsize" class="col-4 font-weight-bold" align="right">Hill size:</label>
+            <InputNumber id="hillsize" @bind-Value="@inputmodel.HillSize" class="form-control col-2" /><br />
+        </div>
+        <br />
+        @*Hill Name*@
+        <div class="col-12 row">
+            <label for="hillname" class="col-4 font-weight-bold" align="right">Hill name:</label>
+            <InputText id="hillname" @bind-Value="@inputmodel.HillName" class="form-control col-2" />
+        </div>
+        <br />
+        @*Country code*@
+        <div class="col-12 row">
+            <label for="countrycode" class="col-4 font-weight-bold" align="right">Country code:</label>
+            <InputText id="countrycode" @bind-Value="inputmodel.CountryCode" class="form-control col-2" />
+        </div>
+        <br />
+        @*Judgetower outside texure*@
+        <div class="col-12 row">
+            <label for="JudgetowerTextureOut" class="col-4 font-weight-bold" align="right">Judgetower outside material:</label>
+            <InputSelect id="JudgetowerTextureOut" class="form-control col-2" @bind-Value="@inputmodel.JudgetowerTextureOut">
+                @foreach (var item in Textures)
+                {
+                    <option value="@item.Name.ToString()">@item.Displayname.ToString()</option>
+                }
+            </InputSelect>
+            <input type="color" id="JudgetowerColorOut" name="JudgetowerColorOut" @bind-value="@inputmodel.JudgetowerColorOut" class="form-control col-1 w-1">
+        </div>
+        <br />
+
+        <div class="col-12 row">
+            <label for="JudgetowerTextureIn" class="col-4 font-weight-bold" align="right">Judgetower inside material:</label>
+            <InputSelect id="JudgetowerTextureIn" class="form-control col-2" @bind-Value="@inputmodel.JudgetowerTextureIn">
+                @foreach (var item in Textures)
+                {
+                    <option value="@item.Name.ToString()">@item.Displayname.ToString()</option>
+                }
+            </InputSelect>
+            <input type="color" id="JudgetowerColorIn" JudgetowerColorIn="head" @bind-value="@inputmodel.JudgetowerColorIn" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="PillarTexture" class="col-4 font-weight-bold" align="right">Pillar Texture:</label>
+            <InputSelect id="PillarTexture" class="form-control col-2" @bind-Value="@inputmodel.PillarTexture">
+                @foreach (var item in Textures)
+                {
+                    <option value="@item.Name.ToString()">@item.Displayname.ToString()</option>
+                }
+            </InputSelect>
+            <input type="color" id="PillarColor" name="PillarColor" @bind-value="@inputmodel.PillarColor" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="RailingTexture" class="col-4 font-weight-bold" align="right">Railing Texture:</label>
+            <InputSelect id="RailingTexture" class="form-control col-2" @bind-Value="@inputmodel.RailingTexture">
+                @foreach (var item in Textures)
+                {
+                    <option value="@item.Name.ToString()">@item.Displayname.ToString()</option>
+                }
+            </InputSelect>
+            <input type="color" id="RailingColor" name="RailingColor" @bind-value="@inputmodel.RailingColor" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="InrunColor" class="col-4 font-weight-bold" align="right">Inrun sides color:</label>
+            <input type="color" id="InrunColor" name="InrunColor" @bind-value="@inputmodel.InrunColor" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="PlasticColor" class="col-4 font-weight-bold" align="right">Plastic color:</label>
+            <input type="color" id="PlasticColor" name="PlasticColor" @bind-value="@inputmodel.PlasticColor" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="TerrainColor1" class="col-4 font-weight-bold" align="right">Terrain Color 1:</label>
+            <input type="color" id="TerrainColor1" name="TerrainColor1" @bind-value="@inputmodel.TerrainColor1" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="TerrainColor2" class="col-4 font-weight-bold" align="right">Terrain Color 2:</label>
+            <input type="color" id="TerrainColor2" name="TerrainColor2" @bind-value="@inputmodel.TerrainColor2" class="form-control col-1 w-1">
+        </div>
+        <br />
+        <div class="col-12 row">
+            <label for="Trackstype" class="col-4 font-weight-bold" align="right">Tracks type:</label>
+            <InputSelect id="Trackstype" class="form-control col-2" @bind-Value="@inputmodel.Trackstype">
+                @foreach (var item in Tracktypes)
+                {
+                    <option value="@item.Type.ToString()">@item.Type.ToString()</option>
+                }
+            </InputSelect>
+        </div>
+        <br />
+        <button type="submit" class="col-lg-2">Generate hill</button>
+        <br />
+    </EditForm>
+</div>
+
+@code {
+    private UserInputModel inputmodel = new();
+    [Parameter]
+    public string InColor { get; set; }
+    [Parameter]
+    public EventCallback<string> ReturnedColor { get; set; }
+
+
+    private void HandleValidSubmit()
+    {
+        Logger.LogInformation("HandleValidSubmit called");
+        hillService.CreateHill(inputmodel);
+    }
+    private void ImgChange()
+    {
+
+    }
+
+}

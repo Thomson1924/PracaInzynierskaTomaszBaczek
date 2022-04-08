@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Text;
 using static PracaInżynierskaTomaszBaczek.Models.Hill;
 
 namespace PracaInżynierskaTomaszBaczek.Services
@@ -120,7 +121,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             });
             string fullName = $"{model.HillName}-HS{model.HillSize}-{model.CountryCode}.xml";
             var scale = ScaleCounter(model.HillSize.ToString(), hill.dhill.profile.hs);
-            var a = BasicEditor(hill, scale, Convert.ToDouble(model.HillSize));
+            var a = BasicEditor(hill, scale, model);
             HillNameChange(hill, model.HillName, model.CountryCode);
             Save(fullName, a);
             return fullName;
@@ -161,15 +162,27 @@ namespace PracaInżynierskaTomaszBaczek.Services
             hill.inrun.flag.tf = $@"Textures\flag-{country.ToLower()}.png";
         }
 
-        private Hill BasicEditor(Hill hill, double scale, double userhillsize)
+        private void ColorChanger(UserInputModel model)
+        {
+            model.JudgetowerColorIn = model.JudgetowerColorIn.Replace("#", "0x");
+            model.JudgetowerColorOut = model.JudgetowerColorOut.Replace("#", "0x");
+            model.RailingColor = model.RailingColor.Replace("#", "0x");
+            model.InrunColor = model.InrunColor.Replace("#", "0x");
+            model.PillarColor = model.PillarColor.Replace("#", "0x");
+            model.PlasticColor = model.PlasticColor.Replace("#", "0x");
+            model.TerrainColor1 = model.TerrainColor1.Replace("#", "0x");
+            model.TerrainColor2 = model.TerrainColor2.Replace("#", "0x");
+        }
+
+        private Hill BasicEditor(Hill hill, double scale, UserInputModel model)
         {
             //e * ((-0.001 * userhillsize) + 1.15)
             //t  * 0.65
             // gates location point - 16,39
-
+            ColorChanger(model);
 
             //inrun profile
-            hill.inrun.profile.e = Math.Round((Convert.ToDouble(hill.inrun.profile.e) * ((-0.0009 * userhillsize) + 1.101) * scale), 2).ToString().Replace(',', '.');
+            hill.inrun.profile.e = Math.Round((Convert.ToDouble(hill.inrun.profile.e) * ((-0.0009 * Convert.ToDouble(model.HillSize)) + 1.101) * scale), 2).ToString().Replace(',', '.');
             hill.inrun.profile.es = Math.Round((Convert.ToDouble(hill.inrun.profile.e.ToString().Replace('.', ',')) * 0.1639), 2).ToString().Replace(',', '.');
             hill.inrun.profile.t = Math.Round((Convert.ToDouble(hill.inrun.profile.e.ToString().Replace('.', ',')) * 0.0588), 2).ToString().Replace(',', '.');
             hill.inrun.profile.r1 = Math.Round((Convert.ToDouble(hill.inrun.profile.r1) * scale), 2).ToString().Replace(',', '.');
@@ -237,6 +250,28 @@ namespace PracaInżynierskaTomaszBaczek.Services
             hill.terrain.audience.count = Math.Round((Convert.ToDouble(hill.terrain.audience.count) * scale), 0).ToString().Replace(',', '.');
             hill.terrain.audience.d = Math.Round((Convert.ToDouble(hill.terrain.audience.d) * scale), 0).ToString().Replace(',', '.');
             hill.terrain.audience.x0 = Math.Round((Convert.ToDouble(hill.terrain.audience.x0) * scale), 1).ToString().Replace(',', '.');
+
+            //tracks type
+            hill.inrun.track.type = model.Trackstype;
+
+            //colors and textures
+            hill.dhill.judgetower.t1 = model.JudgetowerTextureOut;
+            hill.dhill.judgetower.c1 = model.JudgetowerColorOut;
+            hill.dhill.judgetower.t2 = model.JudgetowerTextureIn;
+            hill.dhill.judgetower.c2 = model.JudgetowerColorIn;
+
+            hill.pillar.c = model.PillarColor;
+            hill.pillar.t = model.PillarTexture;
+
+            hill.railings.ElementAt(0).t = model.RailingTexture;
+            hill.railings.ElementAt(0).c = model.RailingColor;
+
+            hill.inrun.frame.c0 = model.InrunColor;
+
+            hill.dhill.plastic.c = model.PlasticColor;
+
+            hill.terrain.profile.c1 = model.TerrainColor1;
+            hill.terrain.profile.c2 = model.TerrainColor2;
             return hill;
         }
     }
