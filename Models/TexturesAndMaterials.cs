@@ -10,12 +10,13 @@ namespace PracaInżynierskaTomaszBaczek.Pages
     public class TexturesAndMaterials : ComponentBase
     {
         public List<Texture> Textures { get; set; }
+        public List<Tracktype> Tracktypes { get; set; }
 
         protected override Task OnInitializedAsync()
         {
             Textures = new List<Texture>()
             {
-            new Texture() { Name = @"Textures\carpet.png", Displayname = "Carpet", Imgpath = "" },
+            new Texture() { Name = @"Textures\carpet.png", Displayname = "Carpet", Imgpath = "~/Images/carpet.png" },
             new Texture() { Name = @"Textures\concrete-lillehammer.png", Displayname = "Concrete Lillehammer" },
             new Texture() { Name = @"Textures\concrete1.png", Displayname = "Concrete 1"},
             new Texture() { Name = @"Textures\concrete2.png", Displayname = "Concrete 2"},
@@ -60,6 +61,13 @@ namespace PracaInżynierskaTomaszBaczek.Pages
             new Texture() { Name = @"Textures\wood6.png", Displayname = "Wood 6"},
             new Texture() { Name = @"Textures\wood7.png", Displayname = "Wood 7"}
             };
+
+            Tracktypes = new List<Tracktype>()
+            {
+                new Tracktype(){Type="ceramic"},
+                new Tracktype(){Type="default"}
+            };
+
             return base.OnInitializedAsync();
         }
 

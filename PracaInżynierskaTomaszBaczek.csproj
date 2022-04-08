@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="KoLoRoWa-HS50-USA.xml" />
+    <None Remove="Malutka-HS30-Can.xml" />
+    <None Remove="Pierwsza skocznia-HS250-zim.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BlazorColorPicker" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
