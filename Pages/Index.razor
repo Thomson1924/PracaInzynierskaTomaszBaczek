@@ -1,7 +1,92 @@
 ﻿@page "/"
+@using PracaInżynierskaTomaszBaczek.Models;
+@attribute [Authorize]
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<AuthorizeView>
+    <NotAuthorized>
+        <h1>Hill Creator</h1>
+        Please log in
+    </NotAuthorized>
+    <Authorized>
+        <h1>Hill Creator</h1>
+        Hello, @authState.User.Identity.Name!
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-7">
+                @*@if (boardPosts.Count == 0)
+                {
+                <div>
+                    There are no posts
+                </div>
+                }*@
+                @*@foreach (var post in boardPosts)
+                {*@
+                    <div class="card">
+                        <div class="card card-header align-content-md-stretch">
+                            <div class="row">
+                                <div class="col-3">
+                                    @*@post.Author posted on*@ Thomson19 posted on
+                                </div>
+                                <div class="col-3">
+                                    @*@post.PubDate*@
+                                    @DateTime.Today
+                                </div>
+                                <div class="col-6">
+                                    @*@post.Title*@
+                                    Test Titlesdfkljvnsldfkjvnsldkfjvna'lkv 'akv'al dfa'lk slkfdjh alksjd vclaksjd v
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-body align-content-md-stretch">
+                        "This is testing post. Do not consider it as a serious post because it is inoly for testing. This is testing post. Do not consider it as a serious post because it is inoly for testing.This is testing post. Do not consider it as a serious post because it is inoly for testing.This is testing post. Do not consider it as a serious post because it is inoly for testing."
+                    </div>
+                    <div class="card card-footer align-content-md-stretch">
+                        <div class="row">
+                            <div class="col-3">
+                                @*@post.Author posted on*@ Thomson19 on
+                            </div>
+                            <div class="col-3">
+                                @*@post.PubDate*@
+                                @DateTime.Today
+                            </div>
+                            <div class="col-6">
+                                @*@post.Comment.Title*@
+                                "This post is so stupid"
+                            </div>
+                            
+                        </div>
+                        <hr />
+                    </div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+                    <br />
+                @*}*@
+            </div>
+        </div>
+
+    </Authorized>
+</AuthorizeView>
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+
+    private AuthenticationState authState;
+    private List<BoardPost> boardPosts;
+
+
+
+protected override async Task OnInitializedAsync()
+    {
+        authState = await _authState;
+        //var Comments = new List<Comment>();
+        //Comments.Add(new Comment { Author = "Testing author", Body = "This post is so stupid", PubDate = DateTime.Today });
+        //boardPosts.Add(new BoardPost { Title = "TEST1", Author = "Thomson19", Body = "This is testing post. Do not consider it as a serious post because it is inoly for testing.", Comments = Comments, PubDate = DateTime.Now });
+
+
+
+    }
+}

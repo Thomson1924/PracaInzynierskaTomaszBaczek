@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PracaInżynierskaTomaszBaczek.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<AspNetUsers>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
