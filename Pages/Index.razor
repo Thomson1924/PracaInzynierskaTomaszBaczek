@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using PracaInżynierskaTomaszBaczek.Models;
+@using PracaInżynierskaTomaszBaczek.Interfaces;
 @attribute [Authorize]
+@inject IBoardpostService BoardPostsService;
 
 
 <AuthorizeView>
@@ -15,54 +17,69 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-7">
-                @*@if (boardPosts.Count == 0)
+                @if (boardPosts.Count < 1)
                 {
-                <div>
-                    There are no posts
-                </div>
-                }*@
-                @*@foreach (var post in boardPosts)
-                {*@
                     <div class="card">
                         <div class="card card-header align-content-md-stretch">
                             <div class="row">
                                 <div class="col-3">
-                                    @*@post.Author posted on*@ Thomson19 posted on
-                                </div>
-                                <div class="col-3">
-                                    @*@post.PubDate*@
-                                    @DateTime.Today
+                                    @authState.User.Identity.Name
                                 </div>
                                 <div class="col-6">
-                                    @*@post.Title*@
-                                    Test Titlesdfkljvnsldfkjvnsldkfjvna'lkv 'akv'al dfa'lk slkfdjh alksjd vclaksjd v
+                                    <InputText @bind-Value="postmodel.Title"></InputText>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-body align-content-md-stretch">
+                            <InputText @bind-Value="postmodel.Body"></InputText>
+                        </div>
+                        <div class="card card-footer align-content-md-stretch">
+                        </div>
+                    </div>
+                }
+                @foreach (var post in boardPosts)
+                {
+                    <div class="card">
+                        <div class="card card-header align-content-md-stretch">
+                            <div class="row">
+                                <div class="col-3">
+                                    @post.Author posted on
+                                </div>
+                                <div class="col-3">
+                                    @post.PubDate
+
+                                </div>
+                                <div class="col-6">
+                                    @post.Title
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card card-body align-content-md-stretch">
-                        "This is testing post. Do not consider it as a serious post because it is inoly for testing. This is testing post. Do not consider it as a serious post because it is inoly for testing.This is testing post. Do not consider it as a serious post because it is inoly for testing.This is testing post. Do not consider it as a serious post because it is inoly for testing."
+                        @post.Body
                     </div>
                     <div class="card card-footer align-content-md-stretch">
                         <div class="row">
-                            <div class="col-3">
-                                @*@post.Author posted on*@ Thomson19 on
-                            </div>
-                            <div class="col-3">
-                                @*@post.PubDate*@
-                                @DateTime.Today
-                            </div>
-                            <div class="col-6">
-                                @*@post.Comment.Title*@
-                                "This post is so stupid"
-                            </div>
-                            
+                            @foreach (var comment in post.Comments)
+                            {
+                                <div class="col-3">
+                                    @comment.Author posted on
+                                </div>
+                                <div class="col-3">
+                                    @comment.PubDate
+                                </div>
+
+                                <div class="col-6">
+                                    @comment.Body
+                                </div>
+                            }
                         </div>
                         <hr />
+                        }
                     </div>
 
                     <br />
-                @*}*@
+                }
             </div>
         </div>
 
@@ -76,17 +93,29 @@
 
     private AuthenticationState authState;
     private List<BoardPost> boardPosts;
+    private BoardPost postmodel;
 
 
 
-protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         authState = await _authState;
         //var Comments = new List<Comment>();
         //Comments.Add(new Comment { Author = "Testing author", Body = "This post is so stupid", PubDate = DateTime.Today });
         //boardPosts.Add(new BoardPost { Title = "TEST1", Author = "Thomson19", Body = "This is testing post. Do not consider it as a serious post because it is inoly for testing.", Comments = Comments, PubDate = DateTime.Now });
+        await ListAllPosts();
+    }
 
-
-
+    private void CreatePost()
+    {
+        BoardPostsService.Create(postmodel);
+    }
+    private void DeletePost(int Id)
+    {
+        BoardPostsService.Delete(Id);
+    }
+    private Task<List<BoardPost>> ListAllPosts()
+    {
+        return BoardPostsService.ListAll();
     }
 }
