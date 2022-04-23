@@ -17,13 +17,14 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-7">
-                @if (boardPosts.Count < 1)
-                {
+                @*@if (boardPosts.Count < 1)
+                {*@
+                    @*<EditForm Model=@postmodel OnInvalidSubmit="@CreatePost">*@
                     <div class="card">
                         <div class="card card-header align-content-md-stretch">
                             <div class="row">
                                 <div class="col-3">
-                                    @authState.User.Identity.Name
+                                    @*@authState.User.Identity.Name*@
                                 </div>
                                 <div class="col-6">
                                     <InputText @bind-Value="postmodel.Title"></InputText>
@@ -36,41 +37,42 @@
                         <div class="card card-footer align-content-md-stretch">
                         </div>
                     </div>
-                }
+                    @*</EditForm>*@
+                @*}
                 @foreach (var post in boardPosts)
-                {
+                {*@
                     <div class="card">
                         <div class="card card-header align-content-md-stretch">
                             <div class="row">
                                 <div class="col-3">
-                                    @post.Author posted on
+                                    @*@post.Author*@Author posted on
                                 </div>
                                 <div class="col-3">
-                                    @post.PubDate
+                                    @*@post.PubDate*@ @DateTime.Now
 
                                 </div>
                                 <div class="col-6">
-                                    @post.Title
+                                    @*@post.Title*@ Example Title
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card card-body align-content-md-stretch">
-                        @post.Body
+                        @*@post.Body*@ Example post body :LAKSDm;alkdm;alksdcm;alkjdsnblckajnelckqhwerblckvam a;lkjvcn ;lafnvlk jalkjdl kajnsdlk jads
                     </div>
                     <div class="card card-footer align-content-md-stretch">
                         <div class="row">
-                            @foreach (var comment in post.Comments)
-                            {
+                            @*@foreach (var comment in post.Comments)
+                            {*@
                                 <div class="col-3">
-                                    @comment.Author posted on
+                                    @*@comment.Author*@ Author posted on
                                 </div>
                                 <div class="col-3">
-                                    @comment.PubDate
+                                    @*@comment.PubDate*@ @DateTime.Now
                                 </div>
 
                                 <div class="col-6">
-                                    @comment.Body
+                                    @*@comment.Body*@ THIS is example body aklsdjcnlaksjdcnalksdjdcnlakjsdnclaksjdnclkajsndlckajsdlncakjsdnlckasjdncl
                                 </div>
                             }
                         </div>
@@ -79,7 +81,7 @@
                     </div>
 
                     <br />
-                }
+                @*}*@
             </div>
         </div>
 
@@ -103,7 +105,7 @@
         //var Comments = new List<Comment>();
         //Comments.Add(new Comment { Author = "Testing author", Body = "This post is so stupid", PubDate = DateTime.Today });
         //boardPosts.Add(new BoardPost { Title = "TEST1", Author = "Thomson19", Body = "This is testing post. Do not consider it as a serious post because it is inoly for testing.", Comments = Comments, PubDate = DateTime.Now });
-        await ListAllPosts();
+        //await ListAllPosts();
     }
 
     private void CreatePost()
@@ -114,7 +116,7 @@
     {
         BoardPostsService.Delete(Id);
     }
-    private Task<List<BoardPost>> ListAllPosts()
+    private  Task<List<BoardPost>> ListAllPosts()
     {
         return BoardPostsService.ListAll();
     }
