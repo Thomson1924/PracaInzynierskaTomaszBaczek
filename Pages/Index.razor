@@ -3,6 +3,7 @@
 @using PracaInżynierskaTomaszBaczek.Interfaces;
 @attribute [Authorize]
 @inject IBoardpostService BoardPostsService;
+@inject NavigationManager NavManager;
 
 
 <AuthorizeView>
@@ -19,12 +20,12 @@
             <div class="col-md-7">
                 @*@if (boardPosts.Count < 1)
                 {*@
-                    @*<EditForm Model=@postmodel OnInvalidSubmit="@CreatePost">*@
+                    <EditForm Model=@postmodel OnInvalidSubmit="@CreatePost" Context="Commentform">
                     <div class="card">
                         <div class="card card-header align-content-md-stretch">
                             <div class="row">
                                 <div class="col-3">
-                                    @*@authState.User.Identity.Name*@
+                                    @authState.User.Identity.Name
                                 </div>
                                 <div class="col-6">
                                     <InputText @bind-Value="postmodel.Title"></InputText>
@@ -35,9 +36,10 @@
                             <InputText @bind-Value="postmodel.Body"></InputText>
                         </div>
                         <div class="card card-footer align-content-md-stretch">
+                            <button class="btn-success" type="submit" @onclick="CreatePost">Add post</button>
                         </div>
                     </div>
-                    @*</EditForm>*@
+                    </EditForm>
                 @*}
                 @foreach (var post in boardPosts)
                 {*@
@@ -62,6 +64,7 @@
                     </div>
                     <div class="card card-footer align-content-md-stretch">
                         <div class="row">
+
                             @*@foreach (var comment in post.Comments)
                             {*@
                                 <div class="col-3">
@@ -94,8 +97,13 @@
     private Task<AuthenticationState> _authState { get; set; }
 
     private AuthenticationState authState;
-    private List<BoardPost> boardPosts;
-    private BoardPost postmodel;
+    private List<BoardPost> boardPosts = ListAllPosts();
+    BoardPost postmodel = new BoardPost();
+    public class Boardpost
+    {
+        public string Title{ get; set; } = "Title";
+        public string Body { get; set; } = "Comment content";
+    }
 
 
 
@@ -105,18 +113,22 @@
         //var Comments = new List<Comment>();
         //Comments.Add(new Comment { Author = "Testing author", Body = "This post is so stupid", PubDate = DateTime.Today });
         //boardPosts.Add(new BoardPost { Title = "TEST1", Author = "Thomson19", Body = "This is testing post. Do not consider it as a serious post because it is inoly for testing.", Comments = Comments, PubDate = DateTime.Now });
-        //await ListAllPosts();
+        await ListAllPosts();
     }
 
     private void CreatePost()
     {
+        postmodel.Author = authState.User.Identity.Name;
+        postmodel.PubDate = DateTime.Now;
         BoardPostsService.Create(postmodel);
+        NavManager.NavigateTo("/", true);
+
     }
     private void DeletePost(int Id)
     {
         BoardPostsService.Delete(Id);
     }
-    private  Task<List<BoardPost>> ListAllPosts()
+    private static Task<List<BoardPost>> ListAllPosts()
     {
         return BoardPostsService.ListAll();
     }

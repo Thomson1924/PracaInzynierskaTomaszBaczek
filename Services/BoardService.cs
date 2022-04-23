@@ -28,9 +28,10 @@ namespace PracaInżynierskaTomaszBaczek.Services
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
         }
-        public async Task<List<BoardPost>> ListAll()
+        public static async Task<List<BoardPost>> ListAll()
         {
-            return await _context.Posts.ToListAsync();
+            var response = await _context.Posts.ToList();
+            return response;
         }
     }
 }
