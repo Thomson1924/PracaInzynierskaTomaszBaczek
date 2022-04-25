@@ -15,76 +15,129 @@
         <h1>Hill Creator</h1>
         Hello, @authState.User.Identity.Name!
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
             </div>
             <div class="col-md-7">
-                @*@if (boardPosts.Count < 1)
-                {*@
-                    <EditForm Model=@postmodel OnInvalidSubmit="@CreatePost" Context="Commentform">
-                    <div class="card">
-                        <div class="card card-header align-content-md-stretch">
-                            <div class="row">
-                                <div class="col-3">
-                                    @authState.User.Identity.Name
+                @if (boardPosts is null)
+                {
+                    <div>
+                        It seems, that there are no posts. Please refresh.
+                    </div>
+                    <EditForm Model=@postmodel OnInvalidSubmit="@CreatePost" Context="Postform">
+                        <div class="card">
+                            <div class="card card-header align-content-md-stretch">
+                                <div class="row">
+                                    <div class="col-3">
+                                        @authState.User.Identity.Name
+                                    </div>
+                                    <div class="col-6">
+                                        <InputText @bind-Value="postmodel.Title"></InputText>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <InputText @bind-Value="postmodel.Title"></InputText>
+                            </div>
+                            <div class="card card-body align-content-md-stretch">
+                                <InputText @bind-Value="postmodel.Body"></InputText>
+                            </div>
+                            <div class="card card-footer align-content-md-stretch">
+                                <div class="col-2" >
+
+                                </div>
+                                <div class="col-8" align="right">
+                                    <button class="btn btn-success" type="submit" @onclick="CreatePost">Add post</button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </EditForm>
+                }
+                else
+                {
+                    <EditForm Model=@postmodel OnInvalidSubmit="@CreatePost" Context="Postform">
+                        <div class="card">
+                            <div class="card card-header align-content-md-stretch">
+                                <div class="row">
+                                    <div class="col-3">
+                                        @authState.User.Identity.Name
+                                    </div>
+                                    <div class="col-6">
+                                        <InputText @bind-Value="postmodel.Title"></InputText>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-body align-content-md-stretch">
+                                <InputText @bind-Value="postmodel.Body"></InputText>
+                            </div>
+                            <div class="card card-footer align-content-md-stretch">
+                                <div class="col-2" >
+
+                                </div>
+                                <div class="col-8" align="right">
+                                    <button class="btn btn-success" type="submit" @onclick="CreatePost">Add post</button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </EditForm>
+                    @for(int i = boardPosts.Count; i>0; i--)
+                    {
+                        var post = boardPosts[i-1];
+                        <div class="card">
+                            <div class="card card-header align-content-md-stretch">
+                                <div class="row">
+                                    <div class="col-3">
+                                        @post.Author posted on
+                                    </div>
+                                    <div class="col-3">
+                                        @post.PubDate.ToString("dd.MM.yyyy")
+
+                                    </div>
+                                    <div class="col-6">
+                                        @post.Title Example Title
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card card-body align-content-md-stretch">
-                            <InputText @bind-Value="postmodel.Body"></InputText>
-                        </div>
-                        <div class="card card-footer align-content-md-stretch">
-                            <button class="btn-success" type="submit" @onclick="CreatePost">Add post</button>
-                        </div>
-                    </div>
-                    </EditForm>
-                @*}
-                @foreach (var post in boardPosts)
-                {*@
-                    <div class="card">
-                        <div class="card card-header align-content-md-stretch">
                             <div class="row">
-                                <div class="col-3">
-                                    @*@post.Author*@Author posted on
-                                </div>
-                                <div class="col-3">
-                                    @*@post.PubDate*@ @DateTime.Now
-
-                                </div>
-                                <div class="col-6">
-                                    @*@post.Title*@ Example Title
-                                </div>
+                            @post.Body
                             </div>
-                        </div>
-                    </div>
-                    <div class="card card-body align-content-md-stretch">
-                        @*@post.Body*@ Example post body :LAKSDm;alkdm;alksdcm;alkjdsnblckajnelckqhwerblckvam a;lkjvcn ;lafnvlk jalkjdl kajnsdlk jads
-                    </div>
-                    <div class="card card-footer align-content-md-stretch">
-                        <div class="row">
-
-                            @*@foreach (var comment in post.Comments)
-                            {*@
-                                <div class="col-3">
-                                    @*@comment.Author*@ Author posted on
-                                </div>
-                                <div class="col-3">
-                                    @*@comment.PubDate*@ @DateTime.Now
-                                </div>
-
-                                <div class="col-6">
-                                    @*@comment.Body*@ THIS is example body aklsdjcnlaksjdcnalksdjdcnlakjsdnclaksjdnclkajsndlckajsdlncakjsdnlckasjdncl
-                                </div>
+                            @if(post.Author == authState.User.Identity.Name)
+                            {
+                            <div class="col-8" align="right">
+                                    <button class="btn btn-warning" @onclick="() => DeletePost(post.Id)">Delete</button>
+                            </div>
                             }
                         </div>
-                        <hr />
-                        }
-                    </div>
+                        <div class="card card-footer align-content-md-stretch">
+                            <div class="row">
+                                @if (post.Comments is not null)
+                                {
 
-                    <br />
-                @*}*@
+                                    @foreach (var comment in post.Comments)
+                                    {
+                                        <div class="col-3">
+                                            @comment.Author Author posted on
+                                        </div>
+                                        <div class="col-3">
+                                            @comment.PubDate @DateTime.Now
+                                        </div>
+
+                                        <div class="col-6">
+                                            @comment.Body
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                            <hr />
+
+                        </div>
+
+                        <br />
+                    }
+                }
             </div>
         </div>
 
@@ -97,11 +150,11 @@
     private Task<AuthenticationState> _authState { get; set; }
 
     private AuthenticationState authState;
-    private List<BoardPost> boardPosts = ListAllPosts();
+    private List<BoardPost> boardPosts;
     BoardPost postmodel = new BoardPost();
     public class Boardpost
     {
-        public string Title{ get; set; } = "Title";
+        public string Title { get; set; } = "Title";
         public string Body { get; set; } = "Comment content";
     }
 
@@ -110,10 +163,7 @@
     protected override async Task OnInitializedAsync()
     {
         authState = await _authState;
-        //var Comments = new List<Comment>();
-        //Comments.Add(new Comment { Author = "Testing author", Body = "This post is so stupid", PubDate = DateTime.Today });
-        //boardPosts.Add(new BoardPost { Title = "TEST1", Author = "Thomson19", Body = "This is testing post. Do not consider it as a serious post because it is inoly for testing.", Comments = Comments, PubDate = DateTime.Now });
-        await ListAllPosts();
+        boardPosts = await ListAllPosts();
     }
 
     private void CreatePost()
@@ -126,9 +176,10 @@
     }
     private void DeletePost(int Id)
     {
-        BoardPostsService.Delete(Id);
+         BoardPostsService.Delete(Id);
+         NavManager.NavigateTo("/", true);
     }
-    private static Task<List<BoardPost>> ListAllPosts()
+    private Task<List<BoardPost>> ListAllPosts()
     {
         return BoardPostsService.ListAll();
     }
