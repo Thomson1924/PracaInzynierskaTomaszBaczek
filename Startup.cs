@@ -13,6 +13,7 @@ using PracaInżynierskaTomaszBaczek.Areas.Identity;
 using PracaInżynierskaTomaszBaczek.Data;
 using PracaInżynierskaTomaszBaczek.Interfaces;
 using PracaInżynierskaTomaszBaczek.Services;
+using Sotsera.Blazor.Toaster.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,14 @@ namespace PracaInżynierskaTomaszBaczek
         options.ClientId = googleAuthNSection["ClientId"];
         options.ClientSecret = googleAuthNSection["ClientSecret"];
     });
+            services.AddToaster(config =>
+            {
+                config.PositionClass = Defaults.Classes.Position.BottomRight;
+                config.PreventDuplicates = true;
+                config.NewestOnTop = false;
+                config.ShowProgressBar = false;
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
