@@ -2,16 +2,18 @@
 using PracaInżynierskaTomaszBaczek.Data;
 using PracaInżynierskaTomaszBaczek.Interfaces;
 using PracaInżynierskaTomaszBaczek.Models;
+using PracaInżynierskaTomaszBaczek.Migrations;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PracaInżynierskaTomaszBaczek.Services
 {
-    public class DatabaseService : IDatabaseService
+    public class HillViewerService : IHillViewerService
     {
         private readonly ApplicationDbContext _context;
-        public DatabaseService(ApplicationDbContext context)
+        public HillViewerService(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -42,6 +44,13 @@ namespace PracaInżynierskaTomaszBaczek.Services
             await _context.Hills.AddAsync(data);
             var result = await _context.SaveChangesAsync();
             return result > 0;
+        }
+
+
+        public async Task<List<CreatedHills>> ListAll()
+        {
+            var hills = await _context.Hills.ToListAsync();
+            return hills;
         }
     }
 }

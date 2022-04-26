@@ -2,19 +2,146 @@
 @using PracaInżynierskaTomaszBaczek.Models;
 @using PracaInżynierskaTomaszBaczek.Interfaces;
 @inject IBoardpostService BoardPostsService;
+@inject ICommentService CommentService;
+@inject NavigationManager NavManager;
 
-<h3>@post.Author</h3>
 
 
+
+@if (post == null)
+{
+    <div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card card-header align-content-md-stretch">
+            <div class="row">
+                <div class="col-3">
+                    @post.Author posted on
+                </div>
+                <div class="col-3">
+                    @post.PubDate.ToString("dd.MM.yyyy")
+                </div>
+                <div class="col-6">
+                    @post.Title
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-body align-content-md-stretch">
+        <div class="row">
+            <div class="col-3">
+                @post.Body
+            </div>
+        </div>
+    </div>
+    <div class="card card-footer align-content-md-stretch">
+        <div class="row">
+            @if (post.Comments is not null)
+            {
+               <EditForm Model=newcomment OnValidSubmit="CreateComment" Context="Commentform">
+                    <div class="row">
+                        <div class="col-3">
+                            @authState.User.Identity.Name
+                        </div>
+                        <div class="col-3">
+                            @DateTime.Now
+                        </div>
+                        <div class="col-5">
+                            <InputText @bind-Value="newcomment.Body"></InputText>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-success" type="submit" @onclick="CreateComment">Add comment</button>
+                        </div>
+                    </div>
+                </EditForm>
+                <br />
+                @foreach (var comment in post.Comments)
+                {
+                    <div class="row">
+                        <div class="col-3">
+                            @comment.Author posted on
+                        </div>
+                        <div class="col-3">
+                            @comment.PubDate
+                        </div>
+
+                        <div class="col-6">
+                            @comment.Body
+                        </div>
+                        @if (post.Author == authState.User.Identity.Name)
+                        {
+                            <div class="col-2" align="right">
+                                <button class="btn btn-warning" @onclick="() => DeleteComment(comment.Id)">Delete</button>
+                            </div>
+                        }
+                    </div>
+                    <br />
+                }
+            }
+            else
+            {
+
+                <EditForm Model=newcomment OnValidSubmit="CreateComment" Context="Commentform">
+                    <div class="row">
+                        <div class="col-3">
+                            @authState.User.Identity.Name
+                        </div>
+                        <div class="col-3">
+                            @DateTime.Now
+                        </div>
+                        <div class="col-5">
+                            <InputText @bind-Value="newcomment.Body"></InputText>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-success" type="submit" @onclick="CreateComment">Add comment</button>
+                        </div>
+                    </div>
+                </EditForm>
+                <br />
+
+            }
+        </div>
+        <hr />
+    </div>
+}
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
 
+    Models.Comment newcomment = new Models.Comment();
+
+    public class Comment
+    {
+        public string Author { get; set; } = "Author";
+        public string Body { get; set; } = "Comment content";
+        public DateTime PubDate { get; set; } = DateTime.Now;
+
+    }
+    private AuthenticationState authState;
     [Parameter]
     public string Value { get; set; }
     private BoardPost post { get; set; }
-
-    protected async override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        authState = await _authState;
         post = await BoardPostsService.GetPost(Value);
+    }
 
+    private void CreateComment()
+    {
+        var postId = post.Id;
+        newcomment.Author = authState.User.Identity.Name;
+        newcomment.PubDate = DateTime.Now;
+        CommentService.Create(newcomment, postId, post);
+        NavManager.NavigateTo($"/Post/{Value}", true);
+
+    }
+    private void DeleteComment(int Id)
+    {
+        CommentService.Delete(Id);
+        NavManager.NavigateTo($"/Post/{Value}", true);
     }
 }

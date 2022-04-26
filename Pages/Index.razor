@@ -52,7 +52,7 @@
                 }
                 else
                 {
-                    <EditForm Model=@postmodel OnInvalidSubmit="@CreatePost" Context="Postform">
+                    <EditForm Model=@postmodel OnValidSubmit="@CreatePost" Context="Postform">
                         <div class="card">
                             <div class="card card-header align-content-md-stretch">
                                 <div class="row">
@@ -81,6 +81,7 @@
                     </EditForm>
                         @foreach(var post in boardPosts)
                         {
+                        string postlink = $"/Post/{post.Id}";
                         <div class="card">
                             <div class="card card-header align-content-md-stretch">
                                 <div class="row">
@@ -92,7 +93,7 @@
 
                                     </div>
                                     <div class="col-6">
-                                        <NavLink class="nav-link" href="/Post/3">
+                                        <NavLink class="nav-link" href=@postlink>
                                         @post.Title
                                         </NavLink>
                                     </div>
@@ -160,6 +161,8 @@
         authState = await _authState;
         boardPosts = await ListAllPosts();
     }
+
+
 
     private void CreatePost()
     {

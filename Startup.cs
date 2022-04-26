@@ -47,7 +47,8 @@ namespace PracaInżynierskaTomaszBaczek
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddScoped<IHillService, HillService>();
             services.AddScoped<IBoardpostService, BoardService>();
-            services.AddScoped<IDatabaseService, DatabaseService>();
+            services.AddScoped<IHillViewerService, HillViewerService>();
+            services.AddScoped<ICommentService, CommentService>();
             services.AddAuthentication()
     .AddGoogle(options =>
     {

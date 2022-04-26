@@ -16,10 +16,10 @@ namespace PracaInżynierskaTomaszBaczek.Services
 {
     public class HillService : IHillService
     {
-        private readonly IDatabaseService _databaseService;
+        private readonly IHillViewerService _databaseService;
         private readonly IHostEnvironment _hostEnvironment;
         private string _filePath;
-        public HillService(IHostEnvironment hostEnvironment, IDatabaseService databaseService)
+        public HillService(IHostEnvironment hostEnvironment, IHillViewerService databaseService)
         {
 
             _hostEnvironment = hostEnvironment;

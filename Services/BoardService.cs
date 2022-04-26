@@ -38,8 +38,10 @@ namespace PracaInżynierskaTomaszBaczek.Services
         public async Task<BoardPost> GetPost(string Id)
         {
             int.TryParse(Id, out var postId);
-            var result = await _context.Posts.Select(x=>x.Id==postId).FirstOrDefaultAsync();
-            return result;
+            return await _context.Posts
+                .Include(y => y.Comments)
+                .Where(x => x.Id == postId)
+                .FirstOrDefaultAsync();
         }
     }
 }

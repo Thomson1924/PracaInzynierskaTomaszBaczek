@@ -1,0 +1,51 @@
+﻿@page "/Viewhills"
+@using PracaInżynierskaTomaszBaczek.Models
+@using PracaInżynierskaTomaszBaczek.Interfaces
+@inject IHillViewerService databaseService
+
+
+<h3>ViewHills</h3>
+
+<div class="container">
+    <h3 class="p-3 text-center">Blazor WebAssembly - Display a list of items</h3>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Hill Name</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hill in Hills)
+            {
+                <tr>
+                    <td>@hill.HillName</td>
+                    @if(hill.User is null)
+                    {
+                        <td> Created by:Anonymous User</td>
+                    }
+                    else
+                    {
+                        <td>Created by:@hill.User</td>
+                    }
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+    private List<CreatedHills> Hills;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Hills = await ListAllHills();
+    }
+    private Task<List<CreatedHills>> ListAllHills()
+    {
+        return databaseService.ListAll();
+    } 
+}
