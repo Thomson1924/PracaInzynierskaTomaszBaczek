@@ -126,6 +126,16 @@
     public string InColor { get; set; }
     [Parameter]
     public EventCallback<string> ReturnedColor { get; set; }
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+
+    private AuthenticationState authState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await _authState;
+        LoadLists();
+    }
 
 
     private void HandleValidSubmit()
@@ -140,7 +150,7 @@
         }
         else
         {
-            hillService.CreateHill(inputmodel);
+            hillService.CreateHill(inputmodel, authState);
         }
 
 

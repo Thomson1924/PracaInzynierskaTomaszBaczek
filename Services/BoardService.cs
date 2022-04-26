@@ -24,13 +24,22 @@ namespace PracaInżynierskaTomaszBaczek.Services
 
         public async void Delete(int Id)
         {
-            var post = _context.Posts.Where(x => x.Id == Id).FirstOrDefault();
+            var post = await _context.Posts.Where(x => x.Id == Id).FirstOrDefaultAsync();
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
         }
         public async Task<List<BoardPost>> ListAll()
         {
-            return await _context.Posts.ToListAsync();
+            
+            var post = await _context.Posts.ToListAsync();
+            post.Reverse();
+            return post;
+        }
+        public async Task<BoardPost> GetPost(string Id)
+        {
+            int.TryParse(Id, out var postId);
+            var result = await _context.Posts.Select(x=>x.Id==postId).FirstOrDefaultAsync();
+            return result;
         }
     }
 }

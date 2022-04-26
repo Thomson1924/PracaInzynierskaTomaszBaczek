@@ -1,0 +1,20 @@
+﻿@page "/Post/{Value}"
+@using PracaInżynierskaTomaszBaczek.Models;
+@using PracaInżynierskaTomaszBaczek.Interfaces;
+@inject IBoardpostService BoardPostsService;
+
+<h3>@post.Author</h3>
+
+
+@code {
+
+    [Parameter]
+    public string Value { get; set; }
+    private BoardPost post { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        post = await BoardPostsService.GetPost(Value);
+
+    }
+}

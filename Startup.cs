@@ -45,8 +45,9 @@ namespace PracaInżynierskaTomaszBaczek
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AspNetUsers>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<IHillService, HillService>();
+            services.AddScoped<IHillService, HillService>();
             services.AddScoped<IBoardpostService, BoardService>();
+            services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddAuthentication()
     .AddGoogle(options =>
     {

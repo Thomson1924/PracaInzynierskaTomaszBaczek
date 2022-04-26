@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PracaInżynierskaTomaszBaczek.Data;
 
-namespace PracaInżynierskaTomaszBaczek.Data.Migrations
+namespace PracaInżynierskaTomaszBaczek.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -16,7 +16,7 @@ namespace PracaInżynierskaTomaszBaczek.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.15")
+                .HasAnnotation("ProductVersion", "5.0.16")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -268,6 +268,29 @@ namespace PracaInżynierskaTomaszBaczek.Data.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("PracaInżynierskaTomaszBaczek.Models.CreatedHills", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("HillName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Hills");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -327,6 +350,21 @@ namespace PracaInżynierskaTomaszBaczek.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Boardpost");
+                });
+
+            modelBuilder.Entity("PracaInżynierskaTomaszBaczek.Models.CreatedHills", b =>
+                {
+                    b.HasOne("PracaInżynierskaTomaszBaczek.Data.AspNetUsers", "User")
+                        .WithMany("Hills")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PracaInżynierskaTomaszBaczek.Data.AspNetUsers", b =>
+                {
+                    b.Navigation("Hills");
                 });
 
             modelBuilder.Entity("PracaInżynierskaTomaszBaczek.Models.BoardPost", b =>

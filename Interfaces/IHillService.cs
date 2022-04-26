@@ -1,4 +1,5 @@
-﻿using PracaInżynierskaTomaszBaczek.Models;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using PracaInżynierskaTomaszBaczek.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,6 @@ namespace PracaInżynierskaTomaszBaczek.Interfaces
 {
     public interface IHillService
     {
-        public Task<string> CreateHill(UserInputModel model);
+        public Task<string> CreateHill(UserInputModel model, AuthenticationState authstate);
     }
 }

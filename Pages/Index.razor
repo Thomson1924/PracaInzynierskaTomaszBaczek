@@ -79,9 +79,8 @@
                         <br>
                         <br>
                     </EditForm>
-                    @for(int i = boardPosts.Count; i>0; i--)
-                    {
-                        var post = boardPosts[i-1];
+                        @foreach(var post in boardPosts)
+                        {
                         <div class="card">
                             <div class="card card-header align-content-md-stretch">
                                 <div class="row">
@@ -93,7 +92,9 @@
 
                                     </div>
                                     <div class="col-6">
-                                        @post.Title Example Title
+                                        <NavLink class="nav-link" href="/Post/3">
+                                        @post.Title
+                                        </NavLink>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +114,6 @@
                             <div class="row">
                                 @if (post.Comments is not null)
                                 {
-
                                     @foreach (var comment in post.Comments)
                                     {
                                         <div class="col-3">
@@ -128,18 +128,14 @@
                                         </div>
                                     }
                                 }
-
                             </div>
                             <hr />
-
                         </div>
-
                         <br />
                     }
                 }
             </div>
         </div>
-
     </Authorized>
 </AuthorizeView>
 
