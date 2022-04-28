@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PracaInżynierskaTomaszBaczek.Interfaces
 {
-    public interface IHillService
+    public interface IHillEditorService
     {
         public Task<string> CreateHill(UserInputModel model, AuthenticationState authstate);
     }

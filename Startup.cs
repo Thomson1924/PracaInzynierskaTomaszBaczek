@@ -45,7 +45,7 @@ namespace PracaInżynierskaTomaszBaczek
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AspNetUsers>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddScoped<IHillService, HillService>();
+            services.AddScoped<IHillEditorService, HillEditorService>();
             services.AddScoped<IBoardpostService, BoardService>();
             services.AddScoped<IHillViewerService, HillViewerService>();
             services.AddScoped<ICommentService, CommentService>();

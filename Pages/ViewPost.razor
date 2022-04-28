@@ -74,7 +74,7 @@ else
                         @if (post.Author == authState.User.Identity.Name)
                         {
                             <div class="col-2" align="right">
-                                <button class="btn btn-warning" @onclick="() => DeleteComment(comment.Id)">Delete</button>
+                                <button class="btn btn-danger" @onclick="() => DeleteComment(comment.Id)">Delete</button>
                             </div>
                         }
                     </div>
@@ -90,7 +90,7 @@ else
                             @authState.User.Identity.Name
                         </div>
                         <div class="col-3">
-                            @DateTime.Now
+                            @DateTime.Now.ToString("dd.MM.yyyy")
                         </div>
                         <div class="col-5">
                             <InputText @bind-Value="newcomment.Body"></InputText>

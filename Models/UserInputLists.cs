@@ -17,7 +17,7 @@ namespace PracaInżynierskaTomaszBaczek.Pages
         {
             Textures = new List<Texture>()
             {
-            new Texture() { Name = @"Textures\carpet.png", Displayname = "Carpet", Imgpath = "~/Images/carpet.png" },
+            new Texture() { Name = @"Textures\carpet.png", Displayname = "Carpet" },
             new Texture() { Name = @"Textures\concrete-lillehammer.png", Displayname = "Concrete Lillehammer" },
             new Texture() { Name = @"Textures\concrete1.png", Displayname = "Concrete 1"},
             new Texture() { Name = @"Textures\concrete2.png", Displayname = "Concrete 2"},

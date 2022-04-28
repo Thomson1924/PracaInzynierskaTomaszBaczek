@@ -14,16 +14,16 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace PracaInżynierskaTomaszBaczek.Services
 {
-    public class HillService : IHillService
+    public class HillEditorService : IHillEditorService
     {
-        private readonly IHillViewerService _databaseService;
+        private readonly IHillViewerService _hillViewerService;
         private readonly IHostEnvironment _hostEnvironment;
         private string _filePath;
-        public HillService(IHostEnvironment hostEnvironment, IHillViewerService databaseService)
+        public HillEditorService(IHostEnvironment hostEnvironment, IHillViewerService databaseService)
         {
 
             _hostEnvironment = hostEnvironment;
-            _databaseService = databaseService;
+            _hillViewerService = databaseService;
             _filePath = Path.Combine(hostEnvironment.ContentRootPath, "Hills");
         }
         public async Task<string> CreateHill(UserInputModel model, AuthenticationState authstate)
@@ -168,17 +168,19 @@ namespace PracaInżynierskaTomaszBaczek.Services
 
             if (string.IsNullOrEmpty(authstate.User.Identity.Name))
             {
-                _databaseService.AddHill(fileName, guid);
+                _hillViewerService.AddHill(fileName, guid);
             }
             else
             {
-                _databaseService.AddHill(authstate.User.Identity.Name, fileName, guid);
+                _hillViewerService.AddHill(authstate.User.Identity.Name, fileName, guid);
             }
 
             using (XmlWriter xmlWriter = XmlWriter.Create(currentpath, settings))
             {
                 serializer.Serialize(xmlWriter, hill, emptyNamespaces);
+                
             }
+            
 
         }
         private void HillNameChange(Hill hill, string name, string country)

@@ -5,7 +5,7 @@
 @using PracaInżynierskaTomaszBaczek.Interfaces
 @using Microsoft.Extensions.Logging
 @inject ILogger<HillEditor> Logger
-@inject IHillService hillService
+@inject IHillEditorService HillEditorService
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 
 <h1 align="center">HillEditor</h1>
@@ -150,7 +150,7 @@
         }
         else
         {
-            hillService.CreateHill(inputmodel, authState);
+            HillEditorService.CreateHill(inputmodel, authState);
         }
 
 

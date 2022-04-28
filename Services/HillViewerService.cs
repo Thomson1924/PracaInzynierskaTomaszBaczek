@@ -50,7 +50,22 @@ namespace PracaInżynierskaTomaszBaczek.Services
         public async Task<List<CreatedHills>> ListAll()
         {
             var hills = await _context.Hills.ToListAsync();
+            hills.Reverse();
             return hills;
+        }
+
+        public async Task<List<CreatedHills>> ListAll(string userID)
+        {
+            var hills = await _context.Hills.Where(x=>x.User.UserName == userID).ToListAsync();
+            hills.Reverse();
+            return hills;
+        }
+
+        public async void DeleteHill(int Id)
+        {
+            var hill = await _context.Hills.Where(x => x.Id == Id).FirstOrDefaultAsync();
+            _context.Hills.Remove(hill);
+            await _context.SaveChangesAsync();
         }
     }
 }

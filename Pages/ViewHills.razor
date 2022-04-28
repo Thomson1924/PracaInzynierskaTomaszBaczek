@@ -1,13 +1,15 @@
 ﻿@page "/Viewhills"
 @using PracaInżynierskaTomaszBaczek.Models
 @using PracaInżynierskaTomaszBaczek.Interfaces
-@inject IHillViewerService databaseService
+@inject IHillViewerService HillViewerService
 
 
 <h3>ViewHills</h3>
-
-<div class="container">
-    <h3 class="p-3 text-center">Blazor WebAssembly - Display a list of items</h3>
+<AuthorizeView>
+    <Authorized>
+    <div class="container">
+    <h3 class="p-3 text-center">User Hills</h3>
+    <h4 class="p-3 text-center">Here you can see and download hills</h4>
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -17,24 +19,46 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var hill in Hills)
+            @if (Hills is null)
             {
-                <tr>
-                    <td>@hill.HillName</td>
-                    @if(hill.User is null)
-                    {
-                        <td> Created by:Anonymous User</td>
-                    }
-                    else
-                    {
-                        <td>Created by:@hill.User</td>
-                    }
-                    <td></td>
-                </tr>
+            <tr> There are no hills. ';</tr>
+            }
+            else
+            {
+
+
+                @foreach (var hill in Hills)
+                {
+                    string filename = @$"{hill.HillName}";
+                    string filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+                    <tr>
+                        <td>@hill.HillName</td>
+                        @if (hill.User is null)
+                        {
+                            <td> Created by:Anonymous User</td>
+                        }
+                        else
+                        {
+                            <td>Created by:@hill.User</td>
+                        }
+                        <td>
+                            <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
 </div>
+</Authorized>
+<NotAuthorized>
+    Please log in to download other users hills.
+</NotAuthorized>
+</AuthorizeView>
+
+
 
 
 @code {
@@ -46,6 +70,6 @@
     }
     private Task<List<CreatedHills>> ListAllHills()
     {
-        return databaseService.ListAll();
-    } 
+        return HillViewerService.ListAll();
+    }
 }

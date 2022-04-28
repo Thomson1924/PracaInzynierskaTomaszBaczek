@@ -107,11 +107,11 @@
                             @if(post.Author == authState.User.Identity.Name)
                             {
                             <div class="col-8" align="right">
-                                    <button class="btn btn-warning" @onclick="() => DeletePost(post.Id)">Delete</button>
+                                    <button class="btn btn-danger" @onclick="() => DeletePost(post.Id)">Delete</button>
                             </div>
                             }
                         </div>
-                        <div class="card card-footer align-content-md-stretch">
+                        @*<div class="card card-footer align-content-md-stretch">
                             <div class="row">
                                 @if (post.Comments is not null)
                                 {
@@ -131,7 +131,7 @@
                                 }
                             </div>
                             <hr />
-                        </div>
+                        </div>*@
                         <br />
                     }
                 }
