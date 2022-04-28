@@ -1,0 +1,75 @@
+﻿@page "/Viewhills"
+@using PracaInżynierskaTomaszBaczek.Models
+@using PracaInżynierskaTomaszBaczek.Interfaces
+@inject IHillViewerService HillViewerService
+
+
+<h3>ViewHills</h3>
+<AuthorizeView>
+    <Authorized>
+    <div class="container">
+    <h3 class="p-3 text-center">User Hills</h3>
+    <h4 class="p-3 text-center">Here you can see and download hills</h4>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Hill Name</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Hills is null)
+            {
+            <tr> There are no hills. ';</tr>
+            }
+            else
+            {
+
+
+                @foreach (var hill in Hills)
+                {
+                    string filename = @$"{hill.HillName}";
+                    string filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+                    <tr>
+                        <td>@hill.HillName</td>
+                        @if (hill.User is null)
+                        {
+                            <td> Created by:Anonymous User</td>
+                        }
+                        else
+                        {
+                            <td>Created by:@hill.User</td>
+                        }
+                        <td>
+                            <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+</Authorized>
+<NotAuthorized>
+    Please log in to download other users hills.
+</NotAuthorized>
+</AuthorizeView>
+
+
+
+
+@code {
+    private List<CreatedHills> Hills;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Hills = await ListAllHills();
+    }
+    private Task<List<CreatedHills>> ListAllHills()
+    {
+        return HillViewerService.ListAll();
+    }
+}

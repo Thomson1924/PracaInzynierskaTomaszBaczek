@@ -8,12 +8,25 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text;
 using static PracaInżynierskaTomaszBaczek.Models.Hill;
+using System.IO;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace PracaInżynierskaTomaszBaczek.Services
 {
-    public class HillService : IHillService
+    public class HillEditorService : IHillEditorService
     {
-        public async Task<string> CreateHill(UserInputModel model)
+        private readonly IHillViewerService _hillViewerService;
+        private readonly IHostEnvironment _hostEnvironment;
+        private string _filePath;
+        public HillEditorService(IHostEnvironment hostEnvironment, IHillViewerService databaseService)
+        {
+
+            _hostEnvironment = hostEnvironment;
+            _hillViewerService = databaseService;
+            _filePath = Path.Combine(hostEnvironment.ContentRootPath, "Hills");
+        }
+        public async Task<string> CreateHill(UserInputModel model, AuthenticationState authstate)
         {
             Hill hill = new Hill();
             hill.location = new Location();
@@ -121,9 +134,9 @@ namespace PracaInżynierskaTomaszBaczek.Services
             });
             string fullName = $"{model.HillName}-HS{model.HillSize}-{model.CountryCode}.xml";
             var scale = ScaleCounter(model.HillSize.ToString(), hill.dhill.profile.hs);
-            var a = BasicEditor(hill, scale, model);
+            var newhill = BasicEditor(hill, scale, model);
             HillNameChange(hill, model.HillName, model.CountryCode);
-            Save(fullName, a);
+            Save(fullName, newhill, authstate);
             return fullName;
         }
 
@@ -137,7 +150,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             return scale;
         }
 
-        private void Save(string fileName, Hill hill)
+        private void Save(string fileName, Hill hill, AuthenticationState authstate)
         {
             XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
@@ -149,11 +162,26 @@ namespace PracaInżynierskaTomaszBaczek.Services
                 OmitXmlDeclaration = true,
 
             };
+            var guid = Guid.NewGuid();
+            var guidname = $"{ guid }-{ fileName}";
+            string currentpath = @$"{ _filePath}\{guidname}";
 
-            using (XmlWriter xmlWriter = XmlWriter.Create(fileName, settings))
+            if (string.IsNullOrEmpty(authstate.User.Identity.Name))
+            {
+                _hillViewerService.AddHill(fileName, guid);
+            }
+            else
+            {
+                _hillViewerService.AddHill(authstate.User.Identity.Name, fileName, guid);
+            }
+
+            using (XmlWriter xmlWriter = XmlWriter.Create(currentpath, settings))
             {
                 serializer.Serialize(xmlWriter, hill, emptyNamespaces);
+                
             }
+            
+
         }
         private void HillNameChange(Hill hill, string name, string country)
         {

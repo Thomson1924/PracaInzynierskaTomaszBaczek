@@ -9,6 +9,5 @@ namespace PracaInżynierskaTomaszBaczek.Models
     {
         public string Name { get; set; }
         public string Displayname { get; set; }
-        public string? Imgpath { get; set; }
     }
 }

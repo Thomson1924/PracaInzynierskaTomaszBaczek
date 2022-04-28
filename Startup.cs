@@ -13,6 +13,7 @@ using PracaInżynierskaTomaszBaczek.Areas.Identity;
 using PracaInżynierskaTomaszBaczek.Data;
 using PracaInżynierskaTomaszBaczek.Interfaces;
 using PracaInżynierskaTomaszBaczek.Services;
+using Sotsera.Blazor.Toaster.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace PracaInżynierskaTomaszBaczek
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
             services.AddIdentity<AspNetUsers, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
@@ -44,8 +45,27 @@ namespace PracaInżynierskaTomaszBaczek
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AspNetUsers>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<IHillService, HillService>();
-            services.AddScoped<IBoardpostService, BoardService>();
+            services.AddTransient<IHillEditorService, HillEditorService>();
+            services.AddTransient<IBoardpostService, BoardService>();
+            services.AddTransient<IHillViewerService, HillViewerService>();
+            services.AddTransient<ICommentService, CommentService>();
+            services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        IConfigurationSection googleAuthNSection =
+
+       Configuration.GetSection("Authentication:Google");
+        options.ClientId = googleAuthNSection["ClientId"];
+        options.ClientSecret = googleAuthNSection["ClientSecret"];
+    });
+            services.AddToaster(config =>
+            {
+                config.PositionClass = Defaults.Classes.Position.BottomRight;
+                config.PreventDuplicates = true;
+                config.NewestOnTop = false;
+                config.ShowProgressBar = false;
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

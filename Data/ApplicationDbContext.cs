@@ -15,10 +15,13 @@ namespace PracaInżynierskaTomaszBaczek.Data
         }
         public DbSet<BoardPost> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<CreatedHills> Hills { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<BoardPost>().HasMany(x => x.Comments).WithOne(x => x.Boardpost).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<AspNetUsers>().HasMany(x => x.Hills).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,8 +8,12 @@ namespace PracaInżynierskaTomaszBaczek.Models
 {
     public class UserInputModel
     {
-        public string HillName { get; set; } = "Default";
+        [Required(ErrorMessage ="Please enter hill name.")]
+        [StringLength(40, ErrorMessage = "Hill name is too long.")]
+        public string HillName { get; set; } = "Hill";
         public string CountryCode { get; set; } = "POL";
+        [Required]
+        [Range(30,500, ErrorMessage ="Hill size must be between 30 and 500.")]
         public int HillSize { get; set; } = 140;
         public string JudgetowerColorOut { get; set; } = "0x959183";
         public string JudgetowerColorIn { get; set; } = "0x78554e";

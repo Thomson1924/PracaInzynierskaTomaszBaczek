@@ -16,7 +16,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
         {
             _context = context;
         }
-        public async void Create(BoardPost boardpost)
+        public async Task Create(BoardPost boardpost)
         {
             await _context.Posts.AddAsync(boardpost);
             await _context.SaveChangesAsync();
@@ -24,13 +24,24 @@ namespace PracaInżynierskaTomaszBaczek.Services
 
         public async void Delete(int Id)
         {
-            var post = _context.Posts.Where(x => x.Id == Id).FirstOrDefault();
+            var post = await _context.Posts.Where(x => x.Id == Id).FirstOrDefaultAsync();
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
         }
         public async Task<List<BoardPost>> ListAll()
         {
-            return await _context.Posts.ToListAsync();
+            
+            var post = await _context.Posts.ToListAsync();
+            post.Reverse();
+            return post;
+        }
+        public async Task<BoardPost> GetPost(string Id)
+        {
+            int.TryParse(Id, out var postId);
+            return await _context.Posts
+                .Include(y => y.Comments)
+                .Where(x => x.Id == postId)
+                .FirstOrDefaultAsync();
         }
     }
 }

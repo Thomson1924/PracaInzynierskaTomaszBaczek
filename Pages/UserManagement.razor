@@ -1,0 +1,79 @@
+﻿@page "/UserManagement"
+@using PracaInżynierskaTomaszBaczek.Models
+@using PracaInżynierskaTomaszBaczek.Interfaces
+@using System.IO
+@inject IHillViewerService HillViewerService
+@inject NavigationManager NavManager;
+
+<h3>User_Management</h3>
+<div class="row">
+    <div class="col">
+        <div class="container">
+            <h3 class="p-3 text-center">User Hills</h3>
+            <h4 class="p-3 text-center">Here you can see and download hills</h4>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Hill Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Hills is null)
+                    {
+                        <tr> There are no hills. ';</tr>
+                    }
+                    else
+                    {
+                        @foreach (var hill in Hills)
+                        {
+                            string filename = @$"{hill.HillName}";
+                            string filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+                            <tr>
+                                <td>@hill.HillName</td>
+                                <td>
+                                    <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">
+                                        Download
+                                    </a>
+                                    <a class="btn btn-danger" role="button" @onclick="() => DeleteHill(hill.HillName, hill.guid, hill.Id)">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col">
+
+    </div>
+</div>
+
+@code {
+
+    private List<CreatedHills> Hills;
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
+
+    private AuthenticationState authState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authState = await _authState;
+        Hills = await ListUserHills();
+    }
+
+    private Task<List<CreatedHills>> ListUserHills()
+    {
+        return HillViewerService.ListAll(authState.User.Identity.Name);
+    }
+    private void DeleteHill(string hillname, Guid guid, int Id)
+    {
+        File.Delete($@"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{guid}-{hillname}");
+        HillViewerService.DeleteHill(Id);
+        NavManager.NavigateTo("/UserManagement", true);
+    }
+
+}
