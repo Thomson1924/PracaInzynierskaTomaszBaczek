@@ -62,13 +62,13 @@
 
 
 @code {
-    private List<CreatedHills> Hills;
+    private List<CreatedHill> Hills;
 
     protected override async Task OnInitializedAsync()
     {
         Hills = await ListAllHills();
     }
-    private Task<List<CreatedHills>> ListAllHills()
+    private Task<List<CreatedHill>> ListAllHills()
     {
         return HillViewerService.ListAll();
     }

@@ -1,0 +1,34 @@
+﻿@page "/HillCreated/{Value}"
+@using PracaInżynierskaTomaszBaczek.Interfaces
+@using PracaInżynierskaTomaszBaczek.Models
+@inject IHillViewerService HillViewerService
+@inject NavigationManager NavManager
+<AuthorizeView>
+    <Authorized>
+<h3 align="center">Your Hill was created succesfully.</h3>
+<div class="row">
+    <a class="btn btn-success" href="/">Back to main page</a>
+    <a class="btn btn-success" href="/UserManagement">Show my hills</a>
+    <a class="btn btn-success" href="/HillEditor">Create another hill</a>
+</div>
+</Authorized>
+<NotAuthorized>
+    <h3 align="center">Your Hill was created succesfully.</h3>
+<div class="row">
+    <a class="btn btn-success" href="/">Back to main page</a>
+    <a class="btn btn-success" href="/ViewHills">Show all hills</a>
+    <a class="btn btn-success" href="/HillEditor">Create another hill</a>
+    </div>
+</NotAuthorized>
+</AuthorizeView>
+
+@code {
+    public int Value { get; set; }
+    private CreatedHill hill { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        hill = await HillViewerService.GetHill(Value);
+    }
+
+}

@@ -1,0 +1,1 @@
+﻿delete from AspNetUsers where EmailConfirmed = 1

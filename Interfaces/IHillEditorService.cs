@@ -10,6 +10,6 @@ namespace PracaInżynierskaTomaszBaczek.Interfaces
 {
     public interface IHillEditorService
     {
-        public Task<string> CreateHill(UserInputModel model, AuthenticationState authstate);
+        public Task<string> CreateHill(UserInputModel model, AuthenticationState authstate, CreatedHill createdhill);
     }
 }

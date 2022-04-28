@@ -53,7 +53,7 @@
 
 @code {
 
-    private List<CreatedHills> Hills;
+    private List<CreatedHill> Hills;
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
 
@@ -65,7 +65,7 @@
         Hills = await ListUserHills();
     }
 
-    private Task<List<CreatedHills>> ListUserHills()
+    private Task<List<CreatedHill>> ListUserHills()
     {
         return HillViewerService.ListAll(authState.User.Identity.Name);
     }

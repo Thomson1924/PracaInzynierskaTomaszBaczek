@@ -3,7 +3,7 @@ using System;
 
 namespace PracaInżynierskaTomaszBaczek.Models
 {
-    public class CreatedHills
+    public class CreatedHill
     {
         public int Id { get; set; }
         public virtual AspNetUsers User { get; set; }
