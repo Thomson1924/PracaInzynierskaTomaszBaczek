@@ -68,9 +68,10 @@ namespace PracaInżynierskaTomaszBaczek.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<CreatedHill> GetHill(int Id)
+        public async Task<CreatedHill> GetHillByGuid(string Id)
         {
-            return await _context.Hills.Where(x => x.Id == Id).FirstOrDefaultAsync();
+            Guid.TryParse(Id, out var hill);
+            return await _context.Hills.Where(x => x.guid == hill).FirstOrDefaultAsync();
         }
     }
 }

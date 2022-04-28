@@ -138,8 +138,8 @@ namespace PracaInżynierskaTomaszBaczek.Services
             var scale = ScaleCounter(model.HillSize.ToString(), hill.dhill.profile.hs);
             var newhill = BasicEditor(hill, scale, model);
             HillNameChange(hill, model.HillName, model.CountryCode);
-            Save(fullName, newhill, authstate, createdhill);
-            return fullName;
+            var id = Save(fullName, newhill, authstate, createdhill);
+            return id;
         }
 
         private double ScaleCounter(string userhillsize, string hillsize)
@@ -152,7 +152,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             return scale;
         }
 
-        private void Save(string fileName, Hill hill, AuthenticationState authstate, CreatedHill createdhill)
+        private string Save(string fileName, Hill hill, AuthenticationState authstate, CreatedHill createdhill)
         {
             XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
@@ -178,14 +178,12 @@ namespace PracaInżynierskaTomaszBaczek.Services
                 
             }
 
-            createdhill = _context.Hills.Where(x => x.guid == guid).FirstOrDefault();
-
             using (XmlWriter xmlWriter = XmlWriter.Create(currentpath, settings))
             {
                 serializer.Serialize(xmlWriter, hill, emptyNamespaces);
                 
             }
-            
+            return guid.ToString();            
 
         }
         //private Task<int> GetCurrentHillId( CreatedHills hill)

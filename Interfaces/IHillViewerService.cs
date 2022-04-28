@@ -13,6 +13,6 @@ namespace PracaInżynierskaTomaszBaczek.Interfaces
         Task<List<CreatedHill>> ListAll();
         Task<List<CreatedHill>> ListAll(string userId);
         void DeleteHill(int Id);
-        Task<CreatedHill> GetHill(int Id);
+        Task<CreatedHill> GetHillByGuid(string Id);
     }
 }

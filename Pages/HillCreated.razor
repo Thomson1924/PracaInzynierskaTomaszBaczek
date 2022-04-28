@@ -16,19 +16,24 @@
     <h3 align="center">Your Hill was created succesfully.</h3>
 <div class="row">
     <a class="btn btn-success" href="/">Back to main page</a>
-    <a class="btn btn-success" href="/ViewHills">Show all hills</a>
+    <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">Download</a>
     <a class="btn btn-success" href="/HillEditor">Create another hill</a>
     </div>
 </NotAuthorized>
 </AuthorizeView>
 
 @code {
-    public int Value { get; set; }
+    [Parameter]
+    public string Value { get; set; }
     private CreatedHill hill { get; set; }
+    string filename;
+    string filepath;
 
     protected override async Task OnInitializedAsync()
     {
-        hill = await HillViewerService.GetHill(Value);
+        hill = await HillViewerService.GetHillByGuid(Value);
+        filename = @$"{hill.HillName}";
+        filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
     }
 
 }

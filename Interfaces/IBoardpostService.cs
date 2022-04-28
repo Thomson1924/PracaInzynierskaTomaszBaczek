@@ -11,6 +11,7 @@ namespace PracaInżynierskaTomaszBaczek.Interfaces
         public void Create(BoardPost boardpost);
         public void Delete(int Id);
         public Task<List<BoardPost>> ListAll();
+        public Task<List<BoardPost>> ListAll(string author);
         public Task<BoardPost> GetPost(string Id);
     }
 }

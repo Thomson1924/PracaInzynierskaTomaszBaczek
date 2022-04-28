@@ -3,6 +3,7 @@
 @using PracaInżynierskaTomaszBaczek.Interfaces
 @using System.IO
 @inject IHillViewerService HillViewerService
+@inject IBoardpostService BoardpostService
 @inject NavigationManager NavManager;
 
 <h3>User_Management</h3>
@@ -10,7 +11,7 @@
     <div class="col">
         <div class="container">
             <h3 class="p-3 text-center">User Hills</h3>
-            <h4 class="p-3 text-center">Here you can see and download hills</h4>
+            <h4 class="p-3 text-center">You can manage your hills here.</h4>
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -47,13 +48,48 @@
         </div>
     </div>
     <div class="col">
-
+        <div class="container">
+            <h3 class="p-3 text-center">Your posts</h3>
+            <h4 class="p-3 text-center">You can manage your posts here</h4>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Posts is null)
+                    {
+                        <tr> There are no Posts.</tr>
+                    }
+                    else
+                    {
+                        @foreach (var post in Posts)
+                        {
+                            string postlink = $"/Post/{post.Id}";
+                            <tr>
+                                <td>
+                                    <NavLink class="nav-link" href=@postlink>
+                                        @post.Title
+                                    </NavLink>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" @onclick="() => DeletePost(post.Id)">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 @code {
 
     private List<CreatedHill> Hills;
+    private List<BoardPost> Posts;
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
 
@@ -63,11 +99,16 @@
     {
         authState = await _authState;
         Hills = await ListUserHills();
+        Posts = await ListUserPosts();
     }
 
     private Task<List<CreatedHill>> ListUserHills()
     {
         return HillViewerService.ListAll(authState.User.Identity.Name);
+    }
+    private Task<List<BoardPost>> ListUserPosts()
+    {
+        return BoardpostService.ListAll(authState.User.Identity.Name);
     }
     private void DeleteHill(string hillname, Guid guid, int Id)
     {
@@ -75,5 +116,9 @@
         HillViewerService.DeleteHill(Id);
         NavManager.NavigateTo("/UserManagement", true);
     }
-
+    private void DeletePost(int Id)
+    {
+        BoardpostService.Delete(Id);
+        NavManager.NavigateTo("/UserManagement", true);
+    }
 }

@@ -150,8 +150,8 @@
         }
         else
         {
-            HillEditorService.CreateHill(inputmodel, authState, newhill);
-            NavManager.NavigateTo(@$"/HillCreated/{newhill.Id}", true);
+            var result = HillEditorService.CreateHill(inputmodel, authState, newhill);
+            NavManager.NavigateTo(@$"/HillCreated/{result.Result}", true);
         }
 
 
