@@ -7,6 +7,7 @@
 @inject ILogger<HillEditor> Logger
 @inject IHillEditorService HillEditorService
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
+@inject NavigationManager NavManager
 
 <h1 align="center">HillEditor</h1>
 <p align="center"> Please provide your hill parameters to create your own Deluxe Ski Jump 4 hill!</p>
@@ -114,7 +115,7 @@
             </InputSelect>
         </div>
         <br />
-        <button type="submit" class="col-lg-2 btn btn-success">Generate hill</button>
+        <button type="submit" class="col-lg-2 btn btn-success" >Generate hill</button>
     </EditForm>
     <br />
 
@@ -124,12 +125,11 @@
     private UserInputModel inputmodel = new();
     [Parameter]
     public string InColor { get; set; }
-    [Parameter]
-    public EventCallback<string> ReturnedColor { get; set; }
     [CascadingParameter]
     private Task<AuthenticationState> _authState { get; set; }
 
     private AuthenticationState authState;
+    private CreatedHill newhill = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -150,7 +150,8 @@
         }
         else
         {
-            HillEditorService.CreateHill(inputmodel, authState);
+            var result = HillEditorService.CreateHill(inputmodel, authState, newhill);
+            NavManager.NavigateTo(@$"/HillCreated/{result.Result}", true);
         }
 
 

@@ -24,7 +24,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             {
                 return false;
             }
-            var data = new CreatedHills 
+            var data = new CreatedHill 
             { 
                 guid = FileId,
                 HillName=HillName,
@@ -36,7 +36,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
         }
         public async Task<bool> AddHill(string HillName, Guid FileId)
         {
-            var data = new CreatedHills
+            var data = new CreatedHill
             {
                 guid = FileId,
                 HillName = HillName
@@ -47,14 +47,14 @@ namespace PracaInżynierskaTomaszBaczek.Services
         }
 
 
-        public async Task<List<CreatedHills>> ListAll()
+        public async Task<List<CreatedHill>> ListAll()
         {
             var hills = await _context.Hills.ToListAsync();
             hills.Reverse();
             return hills;
         }
 
-        public async Task<List<CreatedHills>> ListAll(string userID)
+        public async Task<List<CreatedHill>> ListAll(string userID)
         {
             var hills = await _context.Hills.Where(x=>x.User.UserName == userID).ToListAsync();
             hills.Reverse();
@@ -66,6 +66,12 @@ namespace PracaInżynierskaTomaszBaczek.Services
             var hill = await _context.Hills.Where(x => x.Id == Id).FirstOrDefaultAsync();
             _context.Hills.Remove(hill);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<CreatedHill> GetHillByGuid(string Id)
+        {
+            Guid.TryParse(Id, out var hill);
+            return await _context.Hills.Where(x => x.guid == hill).FirstOrDefaultAsync();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace PracaInżynierskaTomaszBaczek.Data
         }
         public DbSet<BoardPost> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<CreatedHills> Hills { get; set; }
+        public DbSet<CreatedHill> Hills { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

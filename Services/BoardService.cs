@@ -35,6 +35,15 @@ namespace PracaInżynierskaTomaszBaczek.Services
             post.Reverse();
             return post;
         }
+
+        public async Task<List<BoardPost>> ListAll(string author)
+        {
+
+            var posts = await _context.Posts.Where(x => x.Author == author).ToListAsync();
+            posts.Reverse();
+            return posts;
+        }
+
         public async Task<BoardPost> GetPost(string Id)
         {
             int.TryParse(Id, out var postId);

@@ -11,6 +11,7 @@ using static PracaInżynierskaTomaszBaczek.Models.Hill;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
+using PracaInżynierskaTomaszBaczek.Data;
 
 namespace PracaInżynierskaTomaszBaczek.Services
 {
@@ -19,14 +20,15 @@ namespace PracaInżynierskaTomaszBaczek.Services
         private readonly IHillViewerService _hillViewerService;
         private readonly IHostEnvironment _hostEnvironment;
         private string _filePath;
-        public HillEditorService(IHostEnvironment hostEnvironment, IHillViewerService databaseService)
+        private readonly ApplicationDbContext _context;
+        public HillEditorService(IHostEnvironment hostEnvironment, IHillViewerService hillViewerService, ApplicationDbContext context)
         {
-
+            _context = context;
             _hostEnvironment = hostEnvironment;
-            _hillViewerService = databaseService;
+            _hillViewerService = hillViewerService;
             _filePath = Path.Combine(hostEnvironment.ContentRootPath, "Hills");
         }
-        public async Task<string> CreateHill(UserInputModel model, AuthenticationState authstate)
+        public async Task<string> CreateHill(UserInputModel model, AuthenticationState authstate, CreatedHill createdhill)
         {
             Hill hill = new Hill();
             hill.location = new Location();
@@ -136,8 +138,8 @@ namespace PracaInżynierskaTomaszBaczek.Services
             var scale = ScaleCounter(model.HillSize.ToString(), hill.dhill.profile.hs);
             var newhill = BasicEditor(hill, scale, model);
             HillNameChange(hill, model.HillName, model.CountryCode);
-            Save(fullName, newhill, authstate);
-            return fullName;
+            var id = Save(fullName, newhill, authstate, createdhill);
+            return id;
         }
 
         private double ScaleCounter(string userhillsize, string hillsize)
@@ -150,7 +152,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             return scale;
         }
 
-        private void Save(string fileName, Hill hill, AuthenticationState authstate)
+        private string Save(string fileName, Hill hill, AuthenticationState authstate, CreatedHill createdhill)
         {
             XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
@@ -173,6 +175,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             else
             {
                 _hillViewerService.AddHill(authstate.User.Identity.Name, fileName, guid);
+                
             }
 
             using (XmlWriter xmlWriter = XmlWriter.Create(currentpath, settings))
@@ -180,9 +183,13 @@ namespace PracaInżynierskaTomaszBaczek.Services
                 serializer.Serialize(xmlWriter, hill, emptyNamespaces);
                 
             }
-            
+            return guid.ToString();            
 
         }
+        //private Task<int> GetCurrentHillId( CreatedHills hill)
+        //{
+            
+        //}
         private void HillNameChange(Hill hill, string name, string country)
         {
             hill.inrun.startbanner.text = name.ToUpper();
