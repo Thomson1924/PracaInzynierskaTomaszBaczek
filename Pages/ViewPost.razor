@@ -124,7 +124,7 @@ else
     [Parameter]
     public string Value { get; set; }
     private BoardPost post { get; set; }
-    public async Task OnAfterRenderAsync()
+    protected override async Task OnInitializedAsync()
     {
         authState = await _authState;
         post = await BoardPostsService.GetPost(Value);

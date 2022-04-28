@@ -36,7 +36,7 @@ namespace PracaInżynierskaTomaszBaczek
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<AspNetUsers, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
@@ -45,10 +45,10 @@ namespace PracaInżynierskaTomaszBaczek
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AspNetUsers>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddTransient<IHillEditorService, HillEditorService>();
-            services.AddTransient<IBoardpostService, BoardService>();
-            services.AddTransient<IHillViewerService, HillViewerService>();
-            services.AddTransient<ICommentService, CommentService>();
+            services.AddScoped<IHillEditorService, HillEditorService>();
+            services.AddScoped<IBoardpostService, BoardService>();
+            services.AddScoped<IHillViewerService, HillViewerService>();
+            services.AddScoped<ICommentService, CommentService>();
             services.AddAuthentication()
     .AddGoogle(options =>
     {
