@@ -12,6 +12,6 @@ namespace PracaInżynierskaTomaszBaczek.Models
         public string Body { get; set; }
         public string Author { get; set; }
         public DateTime PubDate { get; set; }
-        public virtual List<Comment> Comments { get; set; }
+        public virtual List<Comment> Comments { get; set; } = new();
     }
 }

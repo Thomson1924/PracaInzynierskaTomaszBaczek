@@ -16,7 +16,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
         {
             _context = context;
         }
-        public async void Create(BoardPost boardpost)
+        public async Task Create(BoardPost boardpost)
         {
             await _context.Posts.AddAsync(boardpost);
             await _context.SaveChangesAsync();
