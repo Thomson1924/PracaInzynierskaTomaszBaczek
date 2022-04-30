@@ -36,7 +36,8 @@ namespace PracaInżynierskaTomaszBaczek
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction: sqlOptions => { sqlOptions.EnableRetryOnFailure(); } ), ServiceLifetime.Transient);
             services.AddIdentity<AspNetUsers, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()

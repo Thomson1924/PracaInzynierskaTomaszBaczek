@@ -22,11 +22,12 @@ namespace PracaInżynierskaTomaszBaczek.Services
             await _context.SaveChangesAsync();
         }
 
-        public async void Delete(int Id)
+        public async Task<bool> Delete(int Id)
         {
             var post = await _context.Posts.Where(x => x.Id == Id).FirstOrDefaultAsync();
             _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
         public async Task<List<BoardPost>> ListAll()
         {

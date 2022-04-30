@@ -1,6 +1,4 @@
 ﻿@page "/Post/{Value}"
-@using PracaInżynierskaTomaszBaczek.Models;
-@using PracaInżynierskaTomaszBaczek.Interfaces;
 @inject IBoardpostService BoardPostsService;
 @inject ICommentService CommentService;
 @inject NavigationManager NavManager;
@@ -53,12 +51,12 @@ else
                             <InputText @bind-Value="newcomment.Body"></InputText>
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-success" type="submit" @onclick="CreateComment">Add comment</button>
+                            <button class="btn btn-success" type="submit">Add comment</button>
                         </div>
                     </div>
                 </EditForm>
                 <br />
-                @foreach (var comment in post.Comments)
+                @foreach (var comment in comments)
                 {
                     <div class="row">
                         <div class="col-3">
@@ -71,7 +69,7 @@ else
                         <div class="col-6">
                             @comment.Body
                         </div>
-                        @if (post.Author == authState.User.Identity.Name)
+                        @if (comment.Author == authState.User.Identity.Name)
                         {
                             <div class="col-2" align="right">
                                 <button class="btn btn-danger" @onclick="() => DeleteComment(comment.Id)">Delete</button>
@@ -96,7 +94,7 @@ else
                             <InputText @bind-Value="newcomment.Body"></InputText>
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-success" type="submit" @onclick="CreateComment">Add comment</button>
+                            <button class="btn btn-success" type="submit">Add comment</button>
                         </div>
                     </div>
                 </EditForm>
@@ -112,6 +110,7 @@ else
     private Task<AuthenticationState> _authState { get; set; }
 
     Models.Comment newcomment = new Models.Comment();
+    private List<Models.Comment> comments = new();
 
     public class Comment
     {
@@ -124,17 +123,20 @@ else
     [Parameter]
     public string Value { get; set; }
     private BoardPost post { get; set; }
-    public async Task OnAfterRenderAsync()
+    protected override async Task OnInitializedAsync()
     {
         authState = await _authState;
         post = await BoardPostsService.GetPost(Value);
+        comments = await CommentService.ListAllComments(Value);
     }
+
 
     private void CreateComment()
     {
         var postId = post.Id;
         newcomment.Author = authState.User.Identity.Name;
         newcomment.PubDate = DateTime.Now;
+        newcomment.Boardpost = post;
         CommentService.Create(newcomment, postId, post);
         NavManager.NavigateTo($"/Post/{Value}", true);
 

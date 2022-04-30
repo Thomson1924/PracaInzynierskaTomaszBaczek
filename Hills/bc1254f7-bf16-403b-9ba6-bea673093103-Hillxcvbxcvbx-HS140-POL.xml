@@ -6,7 +6,7 @@
     <track type="ceramic" snow="false" />
     <guardrail z1="-1.0" z2="1.0" x="30" />
     <startgate default="6" max="21" step="0.35" wind="2.4" z1="-1.0" z2="1.0" pz1="-0.8" pz2="0.8" t1="Textures\metal.png" m1="Materials\material1.xml" c1="0xaaaaaa" t2="Textures\metal.png" m2="Materials\material1.xml" c2="0x999999" t3="Textures\metal.png" c3="0x858585" />
-    <startbanner z="0" text="HILLDFGBGDBGD" textsize="0.1" />
+    <startbanner z="0" text="HILLXCVBXCVBX" textsize="0.1" />
     <frame bh="2" snow="true" t="Textures\concrete5.png" m="Materials\material1.xml" c0="0x97a594" c1="0xB2ABA0" c="0x504941" c2="0xB2ABA0" />
     <flag x="12.5" z="4.55" hf="1.4" pf="1.6153" hp="15.0" rb="0.07" rt="0.05" tf="Textures\flag-pol.png" mf="Materials\flag.xml" tp="Textures\wood1.png" mp="Materials\material1.xml" cp="0xffffff" />
     <twigs lz="1.0" rz="-1.0" />
@@ -18,7 +18,7 @@
     <lights x0="-100" x1="210" side="left" step="60" size="3" h="30" d="12.5" r="0.70" g="0.65" b="0.6" attn="0.0005" range="200" t="Textures\rust1.png" m="Materials\metal.xml" c="0x999999" />
     <windflags h="4" l="4.1" d="0.6" t="Textures\rust1.png" m="Materials\metal.xml" c="0x999999" />
     <measurers c1="0xff0000" c2="0xdddddd" />
-    <label summer-d="75" winter-d="75" text="HILLDFGBGDBGD" textsize="2.5" />
+    <label summer-d="75" winter-d="75" text="HILLXCVBXCVBX" textsize="2.5" />
     <plastic c="0x769391" />
     <lines summer-min="105" summer-max="145" winter-min="105" winter-max="145" />
     <numbers min="50" max="140" />

@@ -72,7 +72,7 @@
 
                                 </div>
                                 <div class="col-8" align="right">
-                                    <button class="btn btn-success" type="submit" @onclick="CreatePost">Add post</button>
+                                    <button class="btn btn-success" type="submit" @*@onclick="CreatePost"*@>Add post</button>
                                 </div>
                             </div>
                         </div>
@@ -111,27 +111,6 @@
                             </div>
                             }
                         </div>
-                        @*<div class="card card-footer align-content-md-stretch">
-                            <div class="row">
-                                @if (post.Comments is not null)
-                                {
-                                    @foreach (var comment in post.Comments)
-                                    {
-                                        <div class="col-3">
-                                            @comment.Author Author posted on
-                                        </div>
-                                        <div class="col-3">
-                                            @comment.PubDate @DateTime.Now
-                                        </div>
-
-                                        <div class="col-6">
-                                            @comment.Body
-                                        </div>
-                                    }
-                                }
-                            </div>
-                            <hr />
-                        </div>*@
                         <br />
                     }
                 }

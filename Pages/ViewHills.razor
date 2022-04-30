@@ -21,7 +21,7 @@
         <tbody>
             @if (Hills is null)
             {
-            <tr> There are no hills. ';</tr>
+            <tr> There are no hills.</tr>
             }
             else
             {
@@ -62,6 +62,7 @@
 
 
 @code {
+    private AuthenticationState authstate;
     private List<CreatedHill> Hills;
 
     protected override async Task OnInitializedAsync()

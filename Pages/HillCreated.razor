@@ -23,17 +23,24 @@
 </AuthorizeView>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authState { get; set; }
     [Parameter]
     public string Value { get; set; }
     private CreatedHill hill { get; set; }
     string filename;
     string filepath;
+    private AuthenticationState authState;
 
     protected override async Task OnInitializedAsync()
     {
-        hill = await HillViewerService.GetHillByGuid(Value);
-        filename = @$"{hill.HillName}";
-        filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+        authState = await _authState;
+        if(authState.User.Identity.Name is null)
+        {
+            hill = await HillViewerService.GetHillByGuid(Value);
+            filename = @$"{hill.HillName}";
+            filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+        }
     }
 
 }

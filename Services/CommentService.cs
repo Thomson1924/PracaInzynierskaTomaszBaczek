@@ -16,25 +16,32 @@ namespace PracaInżynierskaTomaszBaczek.Services
         {
             _context = context;
         }
-        public async void Create(Comment comment, int postId, BoardPost post)
+        public async void Create(Comment comment, int postId, BoardPost selectedpost)
         {
-            comment.Boardpost = post;
-            comment.Boardpost.Id = postId; 
-            await _context.Comments.AddAsync(comment);
+
+            var post = _context.Posts.Where(x => x.Id == postId).FirstOrDefault();
+            var newcomment = new Comment { Author=comment.Author, PubDate=comment.PubDate, Body=comment.Body, Boardpost=selectedpost };
+
+            post.Comments.Add(newcomment); 
             await _context.SaveChangesAsync();
+            
 
         }
 
-        public async void Delete(int Id)
+        public async Task<bool> Delete(int Id)
         {
             var comment = await _context.Comments.Where(x => x.Id == Id).FirstOrDefaultAsync();
             _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
 
-        public Task<List<Comment>> ListAll()
+        public async Task<List<Comment>> ListAllComments(string postId)
         {
-            throw new NotImplementedException();
+            int.TryParse(postId, out var list);
+            var comments = await _context.Comments.Where(x=>x.Boardpost.Id ==  list).ToListAsync();
+            comments.Reverse();
+            return comments;
         }
     }
 }
