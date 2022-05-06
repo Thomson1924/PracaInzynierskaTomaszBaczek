@@ -3,24 +3,78 @@
 @using PracaInżynierskaTomaszBaczek.Interfaces;
 @inject IBoardpostService BoardPostsService;
 @inject NavigationManager NavManager;
+@inject IToaster Toaster;
 
 
 <AuthorizeView>
     <NotAuthorized>
-        <h1>Hill Creator</h1>
-        Please log in
-    </NotAuthorized>
-    <Authorized>
-        <h1>Hill Creator</h1>
-        Hello, @authState.User.Identity.Name!
+
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-3">
+                <h1 align="center">Hill Editors</h1>
+                <p align="center">Please log in to add new threads and see comments.</p>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-9">
+                <h3 align="center">Threads</h3>
                 @if (boardPosts is null)
                 {
                     <div>
-                        It seems, that there are no posts. Please refresh.
+                    </div>
+                }
+                else
+                {
+                    @foreach (var post in boardPosts)
+                    {
+                        <div class="card">
+                            <div class="card card-header align-content-md-stretch">
+                                <div class="row">
+                                    <div class="col-3" align="center">
+                                        <div class="row">
+                                            <div class="col" align="left">
+                                                @post.Author
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col" align="left">
+                                                posted on
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2" align="center">
+                                        @post.PubDate.ToString("dd.MM.yyyy")
+
+                                    </div>
+                                    <div class="col-6">
+                                        @post.Title
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-body align-content-md-stretch">
+                            <div class="col-11">
+                                @post.Body
+                            </div>
+                        </div>
+                        <br />
+                    }
+                }
+            </div>
+        </div>
+    </NotAuthorized>
+    <Authorized>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <h1>Hill Creator</h1>
+                Hello, @authState.User.Identity.Name
+            </div>
+            <div class="col-md-9">
+                <h3 align="center">Threads</h3>
+                @if (boardPosts is null)
+                {
+                    <div>
                     </div>
                     <EditForm Model=@postmodel OnInvalidSubmit="@CreatePost" Context="Postform">
                         <div class="card">
@@ -29,8 +83,8 @@
                                     <div class="col-3">
                                         @authState.User.Identity.Name
                                     </div>
-                                    <div class="col-6">
-                                        <InputText @bind-Value="postmodel.Title"></InputText>
+                                    <div>
+                                        <InputText class="col-9" @bind-Value="postmodel.Title"></InputText>
                                     </div>
                                 </div>
                             </div>
@@ -38,8 +92,7 @@
                                 <InputText @bind-Value="postmodel.Body"></InputText>
                             </div>
                             <div class="card card-footer align-content-md-stretch">
-                                <div class="col-2" >
-
+                                <div class="col-2">
                                 </div>
                                 <div class="col-8" align="right">
                                     <button class="btn btn-success" type="submit" @onclick="CreatePost">Add post</button>
@@ -59,8 +112,8 @@
                                     <div class="col-3">
                                         @authState.User.Identity.Name
                                     </div>
-                                    <div class="col-6">
-                                        <InputText @bind-Value="postmodel.Title"></InputText>
+                                    <div>
+                                        <InputText class="col-9" @bind-Value="postmodel.Title"></InputText>
                                     </div>
                                 </div>
                             </div>
@@ -68,48 +121,65 @@
                                 <InputText @bind-Value="postmodel.Body"></InputText>
                             </div>
                             <div class="card card-footer align-content-md-stretch">
-                                <div class="col-2" >
-
+                                <div class="col-2">
                                 </div>
                                 <div class="col-8" align="right">
-                                    <button class="btn btn-success" type="submit" @*@onclick="CreatePost"*@>Add post</button>
+                                    <button class="btn btn-success" type="submit" @*@onclick="CreatePost" *@>Add post</button>
                                 </div>
                             </div>
                         </div>
                         <br>
                         <br>
                     </EditForm>
-                        @foreach(var post in boardPosts)
-                        {
+                    @foreach (var post in boardPosts)
+                    {
                         string postlink = $"/Post/{post.Id}";
                         <div class="card">
                             <div class="card card-header align-content-md-stretch">
                                 <div class="row">
-                                    <div class="col-3">
-                                        @post.Author posted on
+                                    <div class="col-3" align="center">
+                                        <div class="row">
+                                            <div class="col" align="left">
+                                                @post.Author
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col" align="left">
+                                                posted on
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-2" align="center">
                                         @post.PubDate.ToString("dd.MM.yyyy")
 
                                     </div>
-                                    <div class="col-6">
-                                        <NavLink class="nav-link" href=@postlink>
-                                        @post.Title
-                                        </NavLink>
-                                    </div>
+
+                                    @if (post.Author == authState.User.Identity.Name)
+                                    {
+                                        <div class="col-5">
+                                            <NavLink class="nav-link" href=@postlink>
+                                                @post.Title
+                                            </NavLink>
+                                        </div>
+                                        <div class="col-1" align="center">
+                                            <button class="btn btn-danger" @onclick="() => DeletePost(post.Id)">Delete</button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-6">
+                                            <NavLink class="nav-link" href=@postlink>
+                                                @post.Title
+                                            </NavLink>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                         <div class="card card-body align-content-md-stretch">
-                            <div class="row">
-                            @post.Body
+                            <div class="col-11">
+                                @post.Body
                             </div>
-                            @if(post.Author == authState.User.Identity.Name)
-                            {
-                            <div class="col-8" align="right">
-                                    <button class="btn btn-danger" @onclick="() => DeletePost(post.Id)">Delete</button>
-                            </div>
-                            }
                         </div>
                         <br />
                     }
@@ -145,17 +215,30 @@
 
     private void CreatePost()
     {
-        postmodel.Author = authState.User.Identity.Name;
-        postmodel.PubDate = DateTime.Now;
-        BoardPostsService.Create(postmodel);
-        NavManager.NavigateTo("/", true);
+        if (postmodel.Title is null)
+        {
+            Toaster.Error("You need to enter Title");
+        }
+        else if (postmodel.Body is null)
+        {
+            Toaster.Error("You need to enter text.");
+        }
+        else
+        {
+            postmodel.Author = authState.User.Identity.Name;
+            postmodel.PubDate = DateTime.Now;
+            BoardPostsService.Create(postmodel);
+            NavManager.NavigateTo("/", true);
+        }
 
     }
+
     private void DeletePost(int Id)
     {
-         BoardPostsService.Delete(Id);
-         NavManager.NavigateTo("/", true);
+        BoardPostsService.Delete(Id);
+        NavManager.NavigateTo("/", true);
     }
+
     private Task<List<BoardPost>> ListAllPosts()
     {
         return BoardPostsService.ListAll();

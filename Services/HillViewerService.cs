@@ -49,7 +49,9 @@ namespace PracaInżynierskaTomaszBaczek.Services
 
         public async Task<List<CreatedHill>> ListAll()
         {
-            var hills = await _context.Hills.ToListAsync();
+            var hills = await _context.Hills
+                .Include(y => y.User)
+                .ToListAsync();
             hills.Reverse();
             return hills;
         }

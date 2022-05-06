@@ -5,21 +5,29 @@
 @inject NavigationManager NavManager
 <AuthorizeView>
     <Authorized>
-<h3 align="center">Your Hill was created succesfully.</h3>
-<div class="row">
-    <a class="btn btn-success" href="/">Back to main page</a>
-    <a class="btn btn-success" href="/UserManagement">Show my hills</a>
-    <a class="btn btn-success" href="/HillEditor">Create another hill</a>
-</div>
-</Authorized>
-<NotAuthorized>
-    <h3 align="center">Your Hill was created succesfully.</h3>
-<div class="row">
-    <a class="btn btn-success" href="/">Back to main page</a>
-    <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">Download</a>
-    <a class="btn btn-success" href="/HillEditor">Create another hill</a>
-    </div>
-</NotAuthorized>
+        <h3 align="center">Your hill was created succesfully.</h3>
+        <br />
+        <div align="center">
+            <div class="btn-group" role="group" align="center">
+                <a class="btn btn-secondary" href="/">Back to main page</a>
+                <a class="btn btn-success" href="/UserManagement">Show my hills</a>
+                <a class="btn btn-primary" href="/HillEditor">Create another hill</a>
+            </div>
+
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <h3 align="center">Your hill was created succesfully.</h3>
+        <br />
+        <div align="center">
+            <div class="btn-group" role="group" align="center">
+                <a class="btn btn-secondary" href="/">Back to main page</a>
+                <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">Download</a>
+                <a class="btn btn-primary" href="/HillEditor">Create another hill</a>
+            </div>
+        </div>
+    </NotAuthorized>
 </AuthorizeView>
 
 @code {
@@ -35,7 +43,7 @@
     protected override async Task OnInitializedAsync()
     {
         authState = await _authState;
-        if(authState.User.Identity.Name is null)
+        if (authState.User.Identity.Name is null)
         {
             hill = await HillViewerService.GetHillByGuid(Value);
             filename = @$"{hill.HillName}";

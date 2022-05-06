@@ -1,16 +1,18 @@
-﻿@page "/Hilleditor"
+﻿@page "/HillEditor"
 @inherits UserInputLists
 @using PracaInżynierskaTomaszBaczek.Models
 @using PracaInżynierskaTomaszBaczek.Services
 @using PracaInżynierskaTomaszBaczek.Interfaces
 @using Microsoft.Extensions.Logging
-@inject ILogger<HillEditor> Logger
 @inject IHillEditorService HillEditorService
-@inject Sotsera.Blazor.Toaster.IToaster Toaster
+@inject IToaster Toaster
 @inject NavigationManager NavManager
 
-<h1 align="center">HillEditor</h1>
-<p align="center"> Please provide your hill parameters to create your own Deluxe Ski Jump 4 hill!</p>
+<h1 align="center">Hill Editor</h1>
+<p align="center">Fill out the form and create your own ski jumping hill for Deluxe Ski Jump 4!</p>
+<p align="center">You can check the material list 
+    <a href="https://docs.dsj24.pl/general/textures-and-materials.html">here</a>. If you don't choose a color, the default color will be saved.
+</p>
 
 <div id="editorform" align="center">
     <EditForm Model="@inputmodel" OnValidSubmit="@HandleValidSubmit" align="center">
@@ -137,23 +139,9 @@
         LoadLists();
     }
 
-
     private void HandleValidSubmit()
     {
-        if (inputmodel.HillName.ToString().Length < 1)
-        {
-            Toaster.Error("Please enter hill name.");
-        }
-        else if(inputmodel.HillName.ToString().Length > 40)
-        {
-            Toaster.Error("Your name is too long.");
-        }
-        else
-        {
             var result = HillEditorService.CreateHill(inputmodel, authState, newhill);
             NavManager.NavigateTo(@$"/HillCreated/{result.Result}", true);
-        }
-
-
     }
 }

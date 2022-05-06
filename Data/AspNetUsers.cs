@@ -10,7 +10,6 @@ namespace PracaInżynierskaTomaszBaczek.Data
 {
     public class AspNetUsers : IdentityUser
     {
-        public string DisplayedUsername { get; set; }
         public virtual List<CreatedHill> Hills { get; set; }
     }
 }

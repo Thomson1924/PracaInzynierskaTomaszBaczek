@@ -46,9 +46,7 @@ namespace PracaInżynierskaTomaszBaczek.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [Display(Name = "Username")]
-            public string DisplayedUsername { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -78,7 +76,7 @@ namespace PracaInżynierskaTomaszBaczek.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new AspNetUsers { DisplayedUsername = Input.DisplayedUsername, UserName = Input.Email, Email = Input.Email };
+                var user = new AspNetUsers { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

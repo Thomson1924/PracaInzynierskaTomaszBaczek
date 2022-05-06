@@ -13,96 +13,122 @@
 }
 else
 {
-    <div class="card">
-        <div class="card card-header align-content-md-stretch">
-            <div class="row">
-                <div class="col-3">
-                    @post.Author posted on
-                </div>
-                <div class="col-3">
-                    @post.PubDate.ToString("dd.MM.yyyy")
-                </div>
-                <div class="col-6">
-                    @post.Title
-                </div>
-            </div>
+    <h1 align="center">Thread</h1>
+    <div class="row">
+        <div class="col-1">
+            <button class="btn btn-primary" @onclick="GoBack">Main Page</button>
         </div>
-    </div>
-    <div class="card card-body align-content-md-stretch">
-        <div class="row">
-            <div class="col-3">
-                @post.Body
-            </div>
-        </div>
-    </div>
-    <div class="card card-footer align-content-md-stretch">
-        <div class="row">
-            @if (post.Comments is not null)
-            {
-               <EditForm Model=newcomment OnValidSubmit="CreateComment" Context="Commentform">
+        <div class="col-10">
+            <div class="card">
+                <div class="card card-header align-content-md-stretch">
                     <div class="row">
-                        <div class="col-3">
-                            @authState.User.Identity.Name
-                        </div>
-                        <div class="col-3">
-                            @DateTime.Now
-                        </div>
-                        <div class="col-5">
-                            <InputText @bind-Value="newcomment.Body"></InputText>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-success" type="submit">Add comment</button>
-                        </div>
-                    </div>
-                </EditForm>
-                <br />
-                @foreach (var comment in comments)
-                {
-                    <div class="row">
-                        <div class="col-3">
-                            @comment.Author posted on
-                        </div>
-                        <div class="col-3">
-                            @comment.PubDate
-                        </div>
-
-                        <div class="col-6">
-                            @comment.Body
-                        </div>
-                        @if (comment.Author == authState.User.Identity.Name)
-                        {
-                            <div class="col-2" align="right">
-                                <button class="btn btn-danger" @onclick="() => DeleteComment(comment.Id)">Delete</button>
+                        <div class="col-3" align="center">
+                            <div class="row">
+                                <div class="col" align="left">
+                                    @post.Author
+                                </div>
                             </div>
-                        }
-                    </div>
-                    <br />
-                }
-            }
-            else
-            {
-
-                <EditForm Model=newcomment OnValidSubmit="CreateComment" Context="Commentform">
-                    <div class="row">
-                        <div class="col-3">
-                            @authState.User.Identity.Name
+                            <div class="row">
+                                <div class="col" align="left">
+                                    posted on
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-3">
-                            @DateTime.Now.ToString("dd.MM.yyyy")
+                        <div class="col-2" align="center">
+                            @post.PubDate.ToString("dd.MM.yyyy")
+
                         </div>
                         <div class="col-5">
-                            <InputText @bind-Value="newcomment.Body"></InputText>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-success" type="submit">Add comment</button>
+                            @post.Title
                         </div>
                     </div>
-                </EditForm>
-                <br />
+                </div>
+            </div>
+            <div class="card card-body align-content-md-stretch">
+                <div class="row">
+                    <div class="col-12">
+                        @post.Body
+                    </div>
+                </div>
+            </div>
+            <div class="card card-footer align-content-md-stretch">
 
-            }
+                    @if (post.Comments is not null)
+                    {
+                        <EditForm Model=newcomment OnValidSubmit="CreateComment" Context="Commentform">
+                            <div class="row">
+                                <div class="col-3">
+                                    @authState.User.Identity.Name
+                                </div>
+                                <div class="col-2">
+                                    @DateTime.Now
+                                </div>
+                                <div class="col-5">
+                                    <InputText @bind-Value="newcomment.Body" class="align-self-lg-stretch"></InputText>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-success" type="submit">Add comment</button>
+                                </div>
+                            </div>
+                        </EditForm>
+                        <br />
+                        @foreach (var comment in comments)
+                        {
+                            <div class="row">
+                                <div class="col-3">
+                                    @comment.Author posted on
+                                </div>
+                                <div class="col-2">
+                                    @comment.PubDate.ToString("dd.MM.yyyy")
+                                </div>
+
+                                
+                                @if (comment.Author == authState.User.Identity.Name)
+                                {
+                                    <div class="col-5">
+                                    @comment.Body
+                                    </div>
+                                    <div class="col-1" align="right">
+                                        <button class="btn btn-danger" @onclick="() => DeleteComment(comment.Id)">Delete</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-6">
+                                    @comment.Body
+                                    </div>
+                            }
+                        </div>
+                            <br />
+                        }
+                    }
+                    else
+                    {
+
+                        <EditForm Model=newcomment OnValidSubmit="CreateComment" Context="Commentform">
+                            <div class="row">
+                                <div class="col-3">
+                                    @authState.User.Identity.Name
+                                </div>
+                                <div class="col-2">
+                                    @DateTime.Now.ToString("dd.MM.yyyy")
+                                </div>
+                                <div class="col-5">
+                                    <InputText @bind-Value="newcomment.Body"></InputText>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-success" type="submit">Add comment</button>
+                                </div>
+                            </div>
+                        </EditForm>
+                        <br />
+
+                    }
+                </div>
+                <hr />
         </div>
-        <hr />
+        <div class="col-1">
+        </div>
     </div>
 }
 @code {
@@ -145,5 +171,9 @@ else
     {
         CommentService.Delete(Id);
         NavManager.NavigateTo($"/Post/{Value}", true);
+    }
+     private void GoBack()
+    {
+        NavManager.NavigateTo("/");
     }
 }
