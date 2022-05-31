@@ -1,11 +1,13 @@
 ﻿@page "/HillCreated/{Value}"
 @using PracaInżynierskaTomaszBaczek.Interfaces
 @using PracaInżynierskaTomaszBaczek.Models
+@using System.IO
 @inject IHillViewerService HillViewerService
 @inject NavigationManager NavManager
 <AuthorizeView>
     <Authorized>
         <h3 align="center">Your hill was created succesfully.</h3>
+<p align="center">To jump on your hill you have to put it in the folder C:\Users\{username}\Documents\Deluxe Ski Jump 4\Custom Hills </p>
         <br />
         <div align="center">
             <div class="btn-group" role="group" align="center">
@@ -36,8 +38,8 @@
     [Parameter]
     public string Value { get; set; }
     private CreatedHill hill { get; set; }
-    string filename;
-    string filepath;
+    public string filename;
+    public string filepath;
     private AuthenticationState authState;
 
     protected override async Task OnInitializedAsync()
@@ -47,7 +49,7 @@
         {
             hill = await HillViewerService.GetHillByGuid(Value);
             filename = @$"{hill.HillName}";
-            filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+            filepath = @$"Hills/{hill.guid}-{filename}";
         }
     }
 

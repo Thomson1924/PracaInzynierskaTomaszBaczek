@@ -31,11 +31,11 @@
                         @foreach (var hill in Hills)
                         {
                             string filename = @$"{hill.HillName}";
-                            string filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+                            string filepath = @$"Hills/{hill.guid}-{filename}";
                             <tr>
                                 <td>@hill.HillName</td>
                                 <td>
-                                    <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">
+                                    <a class="btn btn-success" href="@filepath" download="@filename" target="_top">
                                         Download
                                     </a>
                                     <a class="btn btn-danger" role="button" @onclick="() => DeleteHill(hill.HillName, hill.guid, hill.Id)">
@@ -114,7 +114,7 @@
     }
     private void DeleteHill(string hillname, Guid guid, int Id)
     {
-        File.Delete($@"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{guid}-{hillname}");
+        File.Delete($@"{Directory.GetCurrentDirectory()}\wwwroot\Hills\{guid}-{hillname}");
 
         HillViewerService.DeleteHill(Id);
 
@@ -126,4 +126,5 @@
         BoardpostService.Delete(Id);
         NavManager.NavigateTo("/UserManagement", true);
     }
+
 }

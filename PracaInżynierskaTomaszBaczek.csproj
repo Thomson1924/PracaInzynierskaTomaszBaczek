@@ -22,7 +22,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Hills\" />
+    <Folder Include="wwwroot\Hills\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Hills\34b852d0-8cf9-4dac-a0d6-faa9ce962d91-Tomas-HS140-POL.xml" />
+    <None Include="wwwroot\Hills\740b69a6-81c3-4b69-94d1-fb14ae711084-testowa typowa-HS140-POL.xml" />
+    <None Include="wwwroot\Hills\96115fbd-6e5a-48a1-9a14-752d90de8c59-TomaszHill-HS80-POL.xml" />
+    <None Include="wwwroot\Hills\b2c9b9c6-af1f-4847-a69d-00c6c9aaf40c-Hill-HS140-POL.xml" />
+    <None Include="wwwroot\Hills\b2f119b1-86b4-4e1a-8914-3ced43109db8-New Hill-HS80-POL.xml" />
+    <None Include="wwwroot\Hills\b3ab0bbd-0c99-4372-a36d-055f4c3f5bf6-Hill-HS140-POL.xml" />
   </ItemGroup>
 
 </Project>

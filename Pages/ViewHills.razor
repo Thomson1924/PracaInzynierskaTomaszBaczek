@@ -30,7 +30,7 @@
                 @foreach (var hill in Hills)
                 {
                     string filename = @$"{hill.HillName}";
-                    string filepath = @$"D:\repos\PracaInżynierskaTomaszBaczek\Hills\{filename}";
+                    string filepath = @$"Hills/{hill.guid}-{filename}";
                     <tr>
                         <td>@hill.HillName</td>
                         @if (hill.User is null)
@@ -42,7 +42,7 @@
                             <td>Created by:@hill.User</td>
                         }
                         <td>
-                            <a class="btn btn-success" role="button" href="@filepath" download="@filename" target="_top">
+                            <a class="btn btn-success" href="@filepath" download="@filename" target="_top">
                                 Download
                             </a>
                         </td>

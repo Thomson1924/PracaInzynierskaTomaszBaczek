@@ -16,6 +16,7 @@ using PracaInżynierskaTomaszBaczek.Services;
 using Sotsera.Blazor.Toaster.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,7 +47,14 @@ namespace PracaInżynierskaTomaszBaczek
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AspNetUsers>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy", builder =>
+                 builder.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader());
+            });
 
             services.AddTransient<IHillEditorService, HillEditorService>();
             services.AddTransient<IBoardpostService, BoardService>();
@@ -71,6 +79,8 @@ namespace PracaInżynierskaTomaszBaczek
                 config.ShowProgressBar = false;
 
             });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,7 +102,7 @@ namespace PracaInżynierskaTomaszBaczek
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors("MyPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

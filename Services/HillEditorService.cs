@@ -26,7 +26,7 @@ namespace PracaInżynierskaTomaszBaczek.Services
             _context = context;
             _hostEnvironment = hostEnvironment;
             _hillViewerService = hillViewerService;
-            _filePath = Path.Combine(hostEnvironment.ContentRootPath, "Hills");
+            _filePath = Path.Combine(hostEnvironment.ContentRootPath,"wwwroot", "Hills");
         }
         public async Task<string> CreateHill(UserInputModel model, AuthenticationState authstate, CreatedHill createdhill)
         {
